@@ -1,5 +1,8 @@
 <!--index.wxml-->
 <view class="container">
+  <view class='inform'>
+    当前为预览版，核心内容还未完成制作，敬请期待。参与开发或提供建议请联系 support@bphots.com
+  </view>
   <view class='head'>
     <!-- 头部 -->
     <view class='title'>

@@ -1,5 +1,13 @@
 /**index.wxss**/
 
+.inform {
+  background-color: #666;
+  padding: 10rpx;
+  color: #fff;
+  text-align: center;
+  font-size: 28rpx;
+}
+
 .head {
   width: 100%;
   display: flex;
@@ -33,7 +41,7 @@
 .btnClass {
   width: 70%;
   height: 80rpx;
-  background-color: #f5deb3;
+  background-color: wheat;
   display: flex;
   justify-content: center;
   align-items: center;
