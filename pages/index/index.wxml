@@ -7,7 +7,7 @@
     <!-- 头部 -->
     <view class='title'>
       <image src='../../image/logo.png' style="width: 50px; height: 50px;margin-left: 50rpx; margin-top: 50rpx; margin-bottom: 50rpx;" />
-      <view style='color: #ffffff; flex-grow: 1; text-align:right;margin-right: 50rpx;'>Nova#0712</view>
+      <view style='color: #ffffff; flex-grow: 1; text-align:right;margin-right: 50rpx;'>{{ nickName }}</view>
     </view>
     <view style='width:100%;color: #dabea9; text-align:center; padding-top: 50rpx;font-size: 60rpx;'>背锅周报</view>
 

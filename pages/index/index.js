@@ -4,13 +4,25 @@ const presetsJs = require('presets.js')
 var presets
 Page({
   data: {
-
+    nickName: '',
   },
 
   onLoad: function() {
+    var that = this;
     presets = app.globalData.presets
     wx.showLoading({
       title: '请稍后...',
+    })
+    wx.getStorage({
+      key: 'nickName',
+      success: function (res) {
+        that.data.nickName = res.data
+        that.data.subscription = true
+        that.setData({
+          nickName: res.data,
+          subscription: true
+        })
+      },
     })
     wx.request({
       // url: 'https://www.bphots.com/week/api/report/personal/' + app.globalData.lastWeekNumber + '/' + app.globalData.playerId,
