@@ -84,7 +84,7 @@ Page({
       })
     } else {
       this.setData({
-        firstTime: '查看周报' + temp,
+        firstTime: '查看周报 ' + temp,
         open: true
       })
     }

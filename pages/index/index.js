@@ -5,19 +5,22 @@ var presets
 Page({
   data: {
     nickName: '',
+    scrollViewId: '',
   },
-
+  btnStart: function () {
+    this.setData({
+      scrollViewId: 'personal'
+    })
+  },
   onLoad: function() {
     var that = this;
     presets = app.globalData.presets
     wx.showLoading({
-      title: '请稍后...',
+      title: '请稍候...',
     })
     wx.getStorage({
       key: 'nickName',
       success: function (res) {
-        that.data.nickName = res.data
-        that.data.subscription = true
         that.setData({
           nickName: res.data,
           subscription: true

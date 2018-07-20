@@ -1,77 +1,37 @@
 /**index.wxss**/
 
-.inform {
-  background-color: #666;
-  padding: 10rpx;
-  color: #fff;
-  text-align: center;
-  font-size: 28rpx;
-}
-
-.head {
+.area {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: #4a196b;
-  align-items: center;
+  margin-top: 100rpx;
 }
 
-.medium {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  align-items: center;
-}
-
-.foot {
-  background-color: #4a196b;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.title {
+.area-row {
   width: 100%;
   display: flex;
   flex-direction: row;
-  align-items: center;
 }
 
-.btnClass {
-  width: 70%;
-  height: 80rpx;
-  background-color: wheat;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #000;
+.area-row-each {
+  width: 50%;
+  text-align: center;
+  color: #fff;
+}
+
+.medal-draw {
+  box-sizing: border-box;
+  width: 100%;
   margin-top: 100rpx;
+  padding: 0 50rpx;
 }
 
-.mediumBtn {
-  width: 70%;
-  height: 100rpx;
-  background-color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #4a196b;
-  margin-top: 100rpx;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #4a196b;
+.medal-draw-desc {
+  text-align: center;
 }
 
-.mediumBtn2 {
-  width: 300rpx;
-  height: 80rpx;
-  background-color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #4a196b;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #4a196b;
+.gametotal {
+  margin-bottom: 100rpx;
+  margin-top: 50rpx;
+  font-size: 24rpx;
+  text-align: center;
+  color: #999;
 }
