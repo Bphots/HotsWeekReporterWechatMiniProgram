@@ -1,0 +1,31 @@
+<!--pages/login/login.wxml-->
+<view class='container' style='align-items:center;background-color: #4a196b;height: {{windowH}}px;'>
+  <form style='width:100%;' bindsubmit="formSubmit" bindreset="formReset">
+    <button open-type='getUserInfo'>获取授权</button>
+    <view class='container' style='align-items:center;background-color: #4a196b;height: {{windowH}}px;'>
+      <image src='../../image/logo.png' style="width: 100px; height: 100px; margin-top: 150rpx;" />
+      <view style='font-size: 60rpx;color: #f5deb3; font-weight:bold;margin-top: 50rpx;'>背锅周报</view>
+      <!-- 未订阅 -->
+      <block wx:if="{{!subscription}}">
+        <view style='display: flex;flex-direction:row;align-items: center;justify-content:center; margin-top: 50rpx;width: 90%;'>
+          <picker style='display: flex; ' bindchange="bindServiceChange" value="{{serviceIndex}}" range="{{service}}" class='pickerStyle'>
+            <view style='color: #999;'>
+              {{service[serviceIndex]}}
+              <image style='width: 35rpx; height: 35rpx; margin-left: 6rpx;' src='/image/spinner_down.png' />
+            </view>
+          </picker>
+          <input type="text" class="edit" style='margin-left: 20rpx;padding:10rpx 10rpx 10rpx 10rpx' name="name" placeholder="nova#1234" />
+        </view>
+        <button form-type='submit' class='btnClass' style='margin-top: 40rpx;'>立即订阅</button>
+      </block>
+      <!-- 已订阅 -->
+      <block wx:if="{{subscription}}">
+        <view style='font-size: 40rpx;color: #f5deb3; font-weight:bold;margin-top: 50rpx;'>
+          {{nickName}}{{region}}
+        </view>
+        <button bindtap='week' class='mediumBtn' style="margin-bottom: 30rpx;">{{firstTime}}</button>
+        <view bindtap='cancel' style='color: #fff;'>取消订阅</view>
+      </block>
+    </view>
+  </form>
+</view>

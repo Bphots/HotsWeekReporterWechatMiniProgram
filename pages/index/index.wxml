@@ -1,0 +1,77 @@
+<!--index.wxml-->
+<view class="container">
+  <view class='head'>
+    <!-- 头部 -->
+    <view class='title'>
+      <image src='../../image/logo.png' style="width: 50px; height: 50px;margin-left: 50rpx; margin-top: 50rpx; margin-bottom: 50rpx;" />
+      <view style='color: #ffffff; flex-grow: 1; text-align:right;margin-right: 50rpx;'>Nova#0712</view>
+    </view>
+    <view style='width:100%;color: #dabea9; text-align:center; padding-top: 50rpx;font-size: 60rpx;'>背锅周报</view>
+
+    <view style='width:80%;color: #ffffff; text-align:center;align-items:center; padding-top: 100rpx;font-size: 30rpx; '>这是每周一份专属你的战报，运用大数据和只能分享，总结你酣战的一周。</view>
+    <view style='width:100%;display: flex; flex-direction: row;padding-top: 100rpx;'>
+      <view style='width:50%;text-align:center;color: #ffffff;'>US</view>
+      <view style='width:50%;text-align:center;color: #ffffff;'>EU</view>
+    </view>
+    <view style='width:100%;display: flex; flex-direction: row;padding-top: 50rpx;'>
+      <view style='width:50%;text-align:center;color: #ffffff;'>APAC</view>
+      <view style='width:50%;text-align:center;color: #ffffff;'>CN</view>
+    </view>
+    <button catchtap='loginClick' class='btnClass' style="margin-bottom: 100rpx;">Let's start</button>
+  </view>
+  <!-- 中部 -->
+  <view class='medium'>
+    <view style='width:100%;color: #000; text-align:center; padding-top: 100rpx;font-size: 60rpx;'>个人战报</view>
+    <view style='width:100%;color: #999; text-align:center; padding-top: 50rpx;font-size: 30rpx;'>这是你的个人战报</view>
+    <!-- ///////////// -->
+    <view style=' width:100%;display: flex; flex-direction: row;padding-top: 100rpx;'>
+      <view style='width:50%; text-align:center;color: #000;font-weight:bold;'>周时长</view>
+      <view style='width:50%; text-align:center;color: #000;font-weight:bold;'>周场次</view>
+    </view>
+    <view style='width:100%;display: flex; flex-direction: row;padding-top: 20rpx;'>
+      <view style='width:50%; text-align:center;color: #999;'>442分钟</view>
+      <view style='width:50%; text-align:center;color: #999;'>21局</view>
+    </view>
+    <!-- ///////////// -->
+    <view style=' width:100%;display: flex; flex-direction: row;padding-top: 100rpx;'>
+      <view style='width:50%; text-align:center;color: #000;font-weight:bold;'>周胜场</view>
+      <view style='width:50%; text-align:center;color: #000;font-weight:bold;'>周胜率</view>
+    </view>
+    <view style='width:100%;display: flex; flex-direction: row;padding-top: 20rpx;'>
+      <view style='width:50%; text-align:center;color: #999;'>15局</view>
+      <view style='width:50%; text-align:center;color: #999;'>73.43%</view>
+    </view>
+    <!-- ///////////// -->
+    <view style=' width:100%;display: flex; flex-direction: row;padding-top: 100rpx; flex-wrap:wrap'>
+      <view style='width:50%; text-align:center;color: #000;font-weight:bold;'>最常使用英雄</view>
+      <view style='width:50%; text-align:center;color: #000;font-weight:bold;'>More...</view>
+      <view style='width:50%; text-align:center;color: #999;'>克罗米</view>
+    </view>
+    <!-- ///////////// -->
+    <button catchtap='loginClick' class='mediumBtn' style="margin-bottom: 100rpx;">查看全球战报</button>
+  </view>
+  <!-- 底部 -->
+  <template name="foot">
+    <view style='width:100%; display: flex;  flex-direction: column;align-items: center;'>
+      <view style='width:100%;color: #fff; text-align:center; padding-top: 50rpx;font-size: 40rpx;font-weight:bold;'>虫群杀手</view>
+      <view style='width:80%;color: #fff; text-align:center; padding-top: 50rpx;font-size: 30rpx;'>虫群杀手虫群杀手虫群杀手虫群杀手虫群杀手虫群杀手虫群杀手虫群杀手虫群杀手虫群杀手虫群杀手虫群杀手虫群杀手虫群杀手虫群杀手</view>
+    </view>
+  </template>
+
+
+  <view class='foot'>
+    <view style='width:100%;color: #dabea9; text-align:center; padding-top: 50rpx;font-size: 60rpx;'>每周事件</view>
+    <swiper>
+      <block wx:for="{{background}}" wx:key="*this">
+        <swiper-item>
+          <template is='foot' data="{{...item}}" />
+        </swiper-item>
+      </block>
+    </swiper>
+    <button catchtap='loginClick' class='btnClass' style="margin-bottom: 100rpx;">查看更多</button>
+  </view>
+
+  <view style='margin-top: 150rpx;text-align:center; justify-content: center;align-items: center;'>每周一次抽取随机勋章</view>
+  <button style='margin-top: 50rpx;' catchtap=' loginClick ' class='mediumBtn2 '>试试手气</button>
+  <view style='margin-top: 50rpx;margin-bottom: 50rpx;text-align:center;color:#999'>本周有 100 盘比赛被记录</view>
+</view>

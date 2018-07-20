@@ -1,0 +1,37 @@
+/* pages/login/login.wxss */
+
+.edit {
+  background-color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: #4a196b;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #4a196b;
+}
+
+.btnClass {
+  width: 90%;
+  height: 80rpx;
+  background-color: #f5deb3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+}
+
+.mediumBtn {
+  width: 70%;
+  height: 100rpx;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #4a196b;
+  margin-top: 50rpx;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #4a196b;
+}
