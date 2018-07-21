@@ -1,13 +1,22 @@
 //index.js
 const app = getApp()
 const presetsJs = require('presets.js')
+const util = require('../../utils/util.js')
 var presets
 Page({
   data: {
     nickName: '',
     scrollViewId: '',
+    events: [],
+    WeekLength: '',
+    WeekTimes: '',
+    WeekWin: '',
+    WeekWinRate: '',
+    WeekMostUsed: '',
+    WeekWinRate: ''
+
   },
-  btnStart: function () {
+  btnStart: function() {
     this.setData({
       scrollViewId: 'personal'
     })
@@ -20,7 +29,7 @@ Page({
     })
     wx.getStorage({
       key: 'nickName',
-      success: function (res) {
+      success: function(res) {
         that.setData({
           nickName: res.data,
           subscription: true
@@ -36,16 +45,33 @@ Page({
       method: 'POST',
       success: function(info) {
         wx.hideLoading()
-        var presetsObj = parseFields(info.data)
-        console.log(presetsObj);
-        presetsJs.dataPersonal = presetsObj
+        var presetsObj = util.parseFields(info.data)
+        presetsJs.setDataPersonal(presetsObj)
+        presetsJs.setDataGlobal(app.globalData.dataGlobal)
 
-        console.log(presetsJs.dataPersonal);
+        var localEvents = [];
+        for (var i in presetsJs.getEvents()) {
+          var item = presetsJs.getEvents()[i]
+          var title = item[0]
+          var content = item[1]()
+          if (content !== false) {
+            var e = {
+              title: title[1], 
+              content: content[1]
+            }
+            localEvents.push(e)
+          }
+        }
+        that.setData({
+          WeekLength: presetsJs.getCounter().WeekLength[1]()[1],
+          WeekTimes: presetsJs.getCounter().WeekTimes[1]()[1],
+          WeekWin: presetsJs.getCounter().WeekWin[1]()[1],
+          WeekWinRate: presetsJs.getCounter().WeekWinRate[1]()[1],
+          WeekMostUsed: presetsJs.getCounter().WeekMostUsed[1]()[1],
+          WeekWinRate: presetsJs.getCounter().WeekMostUsed[1]()[2],
+          events: localEvents
+        })
 
-        console.log(presetsJs.counter.WeekLength);
-        console.log(presetsJs.events);
-        console.log(presetsJs.HeroInf);
-        
       },
       fail: function(e) {
         wx.hideLoading()
@@ -54,38 +80,3 @@ Page({
     })
   }
 })
-var parseFields = function(data) {
-  var parsedObj = {}
-  for (var i in data) {
-    if (i === 'PlayerBase') {
-      parsedObj[i] = matchPresets(data[i])
-    } else {
-      parsedObj[i] = {}
-      var _sumMax = {}
-      for (var j in data[i]) {
-        parsedObj[i][j] = matchPresets(data[i][j])
-        _sumMax = findMax(_sumMax, j, data[i][j])
-      }
-      parsedObj[i]['_sumMax'] = _sumMax
-    }
-  }
-  return parsedObj
-}
-var matchPresets = function(_data) {
-  var _parsedObj = {}
-  for (var i in presets) {
-    if (_data[i] !== undefined) {
-      _parsedObj[presets[i]] = _data[i]
-    }
-  }
-  return _parsedObj
-}
-var findMax = function(_sumMax, index, _data) {
-  for (var i in presets) {
-    var field = presets[i]
-    if (_data[i] !== undefined && (_sumMax[field] === undefined || _sumMax[field][1] < _data[i].sum)) {
-      _sumMax[field] = [index, _data[i].sum]
-    }
-  }
-  return _sumMax
-}

@@ -1,4 +1,5 @@
 //app.js
+const util = require('utils/util.js')
 App({
   onLaunch: function() {
     var that = this;
@@ -9,7 +10,6 @@ App({
     // 登录
     wx.login({
       success: res => {
-
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         var code = res.code; //获取code
         wx.getUserInfo({ //得到rawData, signatrue, encryptData
@@ -44,17 +44,9 @@ App({
         })
       }
     })
-    //获取映射
-    wx.request({
-      url: 'https://www.bphots.com/week/api/report/presets',
-      method: 'GET',
-      success: function(info) {
-        that.globalData.presets = info.data
-      },
-      fail: function(e) {
-        console.log(e);
-      }
-    })
+
+    getPresets(that)
+    getHeroInfo(that)    
   },
   globalData: {
     userInfo: null,
@@ -64,10 +56,16 @@ App({
     //周ID
     lastWeekNumber: null,
     //映射数据
-    presets: null
+    presets: null,
+    //英雄数据
+    heroes: null,
+    //用户各种数据
+    // dataPersonal: null,
+    //全球数据
+    dataGlobal: null
   }
 })
-
+//获取用户信息
 function getPlayerInfo() {
   var that = getApp();
   wx.request({
@@ -77,9 +75,51 @@ function getPlayerInfo() {
     },
     method: 'GET',
     success: function(info) {
-      that.globalData.playerId = info.data.data.PlayerId
-      that.globalData.lastWeekNumber = info.data.data.LastWeekNumber
+      if (info.data.data != null) {
+        that.globalData.playerId = info.data.data.PlayerId
+        that.globalData.lastWeekNumber = info.data.data.LastWeekNumber
+        getGlobaldata(that)
+      }
     },
     fail: function(e) {}
+  })
+}
+//获取映射
+function getPresets(that) {
+  wx.request({
+    url: 'https://www.bphots.com/week/api/report/presets',
+    method: 'GET',
+    success: function(info) {
+      that.globalData.presets = info.data
+    },
+    fail: function(e) {
+      console.log(e);
+    }
+  })
+}
+//获取英雄信息
+function getHeroInfo(that) {
+  wx.request({
+    url: 'https://www.bphots.com/bp_helper/get/herolist/v2/',
+    method: 'GET',
+    success: function(info) {
+      that.globalData.heroes = info.data
+    },
+    fail: function(e) {
+      console.log(e);
+    }
+  })
+}
+//全球数据
+function getGlobaldata(that) {
+  wx.request({
+    url: 'https://www.bphots.com/week/api/report/global/' + that.globalData.lastWeekNumber,
+    method: 'GET',
+    success: function(info) {      
+      that.globalData.dataGlobal = util.parseFields(info.data)
+    },
+    fail: function(e) {
+      console.log(e);
+    }
   })
 }
