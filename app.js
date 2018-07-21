@@ -1,5 +1,5 @@
 //app.js
-const util = require('utils/util.js')
+// const util = require('utils/util.js')
 App({
   onLaunch: function() {
     var that = this;
@@ -27,7 +27,8 @@ App({
     //用户各种数据
     // dataPersonal: null,
     //全球数据
-    dataGlobal: null
+    dataGlobal: null,
+    auth: false
   },
   login: function(that) {
     wx.login({
@@ -55,7 +56,10 @@ App({
                 console.log(that.globalData.sessionId)
                 // that.getPlayerInfo(); // 这个方法调用接口获取玩家名，无需传参
 
-                getGlobaldata(that)
+                // getGlobaldata(that)
+                that.globalData.auth = true
+                console.log(123)
+                
               },
               fail: function (e) {
                 console.log(e);
@@ -118,15 +122,15 @@ function getHeroInfo(that) {
   })
 }
 //全球数据
-function getGlobaldata(that) {
-  wx.request({
-    url: 'https://www.bphots.com/week/api/report/global/' + that.globalData.lastWeekNumber,
-    method: 'GET',
-    success: function(info) {
-      that.globalData.dataGlobal = util.parseFields(info.data)
-    },
-    fail: function(e) {
-      console.log(e);
-    }
-  })
-}
+// function getGlobaldata(that) {
+//   wx.request({
+//     url: 'https://www.bphots.com/week/api/report/global/' + that.globalData.lastWeekNumber,
+//     method: 'GET',
+//     success: function(info) {
+//       that.globalData.dataGlobal = util.parseFields(info.data)
+//     },
+//     fail: function(e) {
+//       console.log(e);
+//     }
+//   })
+// }

@@ -2767,9 +2767,14 @@ var buildRadar = function () {
   for (var i in items) {
     var rankPersonal = dataPersonal.PlayerRankings[items[i]]
     var rankGlobal = dataGlobal.PlayerRankings[items[i]][0]
-    radar.push(Math.round(Math.sqrt(1 - (rankPersonal / rankGlobal)) * 100))
+    radar.push(Math.round(discount(1 - (rankPersonal / rankGlobal)) * 100))
   }
   return radar
+}
+
+var discount = function (num) {
+  var k = 0
+  return num - Math.abs(num - 0.5) * k
 }
 
 module.exports = {

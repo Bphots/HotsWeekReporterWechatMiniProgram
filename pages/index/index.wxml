@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<scroll-view scroll-y style="height: 100vh;" class="container" scroll-into-view="{{ scrollViewId }}">
+<view scroll-y class="container" scroll-into-view="{{ scrollViewId }}">
   <view class='inform'>
     当前为预览版，核心内容还未完成制作，敬请期待。参与开发或提供建议请联系 support@bphots.com
   </view>
@@ -22,7 +22,7 @@
         <view class='area-row-each'>CN</view>
       </view>
     </view>
-    <button catchtap='btnStart' class='btn btn-wheat' hover-class='btn-wheat-hover'>立即开始</button>
+    <button catchtap='btnStart' class='btn btn-wheat' hover-class='btn-wheat-hover'>{{scrollViewId ? '自己往下拖嘛……' : '立即开始'}}</button>
   </view>
   <!-- 中部 -->
   <view class='medium' id='personal'>
@@ -89,4 +89,4 @@
     <button catchtap='medalDraw' class='btn btn-purple btn-tighten'>试试手气</button>
   </view>
   <view class='gametotal'>本周全球有 {{globalGamesCount}} 盘比赛被记录</view>
-</scroll-view>
+</view>

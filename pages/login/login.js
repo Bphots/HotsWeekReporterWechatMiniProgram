@@ -1,5 +1,7 @@
 // pages/login/login.js
 const app = getApp()
+const util = require('../../utils/util.js')
+
 Page({
 
   /**
@@ -69,6 +71,7 @@ Page({
             break;
         }
         that.data.regionName = reg
+        console.log(reg)
         that.setData({
           regionName: reg
         })
@@ -211,9 +214,19 @@ Page({
           console.log(info.data.data)
           app.globalData.playerId = info.data.data.PlayerId
           app.globalData.lastWeekNumber = info.data.data.LastWeekNumber
+          wx.request({
+            url: 'https://www.bphots.com/week/api/report/global/' + app.globalData.lastWeekNumber,
+            method: 'GET',
+            success: function (info) {
+              app.globalData.dataGlobal = util.parseFields(info.data)
+            },
+            fail: function (e) {
+              console.log(e);
+            }
+          })
           wx.setStorage({
             key: 'nickName',
-            data: info.data.data.Name,
+            data: info.data.data.Name + '#' + info.data.data.BattleTag,
           })
           wx.setStorage({
             key: 'region',
@@ -253,7 +266,7 @@ Page({
             })
           } else {
             if (info.data.result == 'Success') {
-              app.getPlayerInfo()
+              that.getPlayerInfo()
               var reg
               switch (info.data.data.region) {
                 case 1:
