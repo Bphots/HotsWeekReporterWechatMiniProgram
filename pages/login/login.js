@@ -7,13 +7,13 @@ Page({
    */
   data: {
     windowH: 0,
-    serviceIndex: 0,
-    service: ['国服', '美服', '亚服', '欧服'],
-    serviceId: [5, 1, 3, 2],
+    regionIndex: 0,
+    region: ['国服', '美服', '亚服', '欧服'],
+    regionId: [5, 1, 3, 2],
     //昵称
     nickName: '',
     //服务器地区
-    region: '',
+    regionName: '',
     //订阅
     subscription: false,
     //周报按钮
@@ -68,9 +68,9 @@ Page({
             reg = '(未知)'
             break;
         }
-        that.data.region = reg
+        that.data.regionName = reg
         that.setData({
-          region: reg
+          regionName: reg
         })
       },
     })
@@ -138,15 +138,15 @@ Page({
   onShareAppMessage: function() {
 
   },
-  bindServiceChange: function(e) {
+  bindRegionChange: function(e) {
     this.setData({
-      serviceIndex: e.detail.value
+      regionIndex: e.detail.value
     })
   },
   formSubmit: function(e) {
     var that = this
     wx.showLoading({
-      title: '请稍后...',
+      title: '请稍候...',
     })
     if (e.detail.value.name != "") {
       console.log('订阅')
@@ -154,7 +154,7 @@ Page({
         url: 'https://www.bphots.com/wxmini/api/reporter/subscribe',
         data: {
           "name": e.detail.value.name,
-          'region': this.data.serviceId[this.data.serviceIndex],
+          'region': this.data.regionId[this.data.regionIndex],
         },
         header: {
           'sessionid': app.globalData.sessionId
@@ -191,7 +191,7 @@ Page({
               }
               that.setData({
                 nickName: info.data.data.name,
-                region: reg,
+                regionName: reg,
                 subscription: true
               })
 
@@ -201,7 +201,7 @@ Page({
               })
               wx.setStorage({
                 key: 'region',
-                data: info.data.data.region,
+                data: info.data.data.regionName,
               })
 
               wx.showToast({
@@ -251,7 +251,7 @@ Page({
           if (info.data.result == 'Success') {
             that.setData({
               nickName: '',
-              region: '',
+              regionName: '',
               subscription: false
             })
             wx.showToast({
