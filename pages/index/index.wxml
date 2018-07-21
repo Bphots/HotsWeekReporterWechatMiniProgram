@@ -70,7 +70,7 @@
   <view class='foot'>
     <view class='title text-wheat'>每周事件</view>
     <swiper autoplay='true' circular='true' interval='3000' class='events-swiper'>
-      <block wx:for="{{events}}" wx:key="*this">
+      <block wx:for="{{events}}" key="{{index}}" wx:key="index">
         <swiper-item>
           <template is='events' data="{{...item}}" />
         </swiper-item>
@@ -81,7 +81,7 @@
   <view class='title'>开发中的功能</view>
   <view class='hero-radar'>
     <view style='width:100%; height:100%;'>
-      <ec-canvas id="mychart-dom-graph" id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}" />
+      <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}" />
     </view>
   </view>
   <view class='medal-draw'>

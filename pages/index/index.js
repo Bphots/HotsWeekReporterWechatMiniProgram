@@ -9,6 +9,7 @@ Page({
     ec: {
       lazyLoad: true
     },
+    chart: null,
     nickName: '',
     scrollViewId: '',
     events: [],
@@ -110,6 +111,7 @@ Page({
           }
         }
         var counter = presetsJs.getCounter()
+        // console.log('request data')
         that.init()
         that.setData({
           WeekBasic: counter.WeekBasic(),
@@ -146,14 +148,19 @@ Page({
   },
   // 点击按钮后初始化图表
   init: function() {
+    // console.log('ecCanvas init', this.ecComponent)
     this.ecComponent.init((canvas, width, height) => {
       // 获取组件的 canvas、width、height 后的回调函数
       // 在这里初始化图表
+      // console.log(canvas, width, height)
       const chart = echarts.init(canvas, null, {
         width: width,
         height: height
       });
+      canvas.setChart(chart);
+      // console.log('chart setted', echarts)
       setOption(chart);
+      // console.log('option setted')
 
       // 将图表实例绑定到 this 上，可以在其他成员函数（如 dispose）中访问
       this.chart = chart;
