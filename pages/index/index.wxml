@@ -60,18 +60,18 @@
     <button catchtap='showCounterMore' class='btn btn-purple' style="margin-top: 10rpx">查看更多</button>
   </view>
   <!-- 底部 -->
-  <template name="foot">
+  <template name="events">
     <view style='width:100%; display: flex;  flex-direction: column;align-items: center;'>
-      <view style='width:100%;color: #fff; text-align:center; padding-top: 50rpx;font-size: 40rpx;font-weight:bold;'>{{title}}</view>
-      <view style='width:80%;color: #fff; text-align:center; padding-top: 50rpx;'>{{content}}</view>
+      <view class='subtitle'>{{title}}</view>
+      <view class='desc text-white'>{{content}}</view>
     </view>
   </template>
   <view class='foot'>
     <view class='title text-wheat'>每周事件</view>
-    <swiper autoplay='true'>
+    <swiper autoplay='true' circular='true' interval='3000'>
       <block wx:for="{{events}}" wx:key="*this">
         <swiper-item>
-          <template is='foot' data="{{...item}}" />
+          <template is='events' data="{{...item}}" />
         </swiper-item>
       </block>
     </swiper>

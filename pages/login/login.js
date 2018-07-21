@@ -201,7 +201,7 @@ Page({
               })
               wx.setStorage({
                 key: 'region',
-                data: info.data.data.regionName,
+                data: info.data.data.region,
               })
 
               wx.showToast({
