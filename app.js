@@ -31,7 +31,7 @@ App({
               success: function(info) {
                 that.globalData.sessionId = info.data.data.sessionid
                 console.log('getPlayerInfo1')
-                getPlayerInfo(); // 这个方法调用接口获取玩家名，无需传参
+                that.getPlayerInfo(); // 这个方法调用接口获取玩家名，无需传参
               },
               fail: function(e) {
                 console.log(e);
@@ -66,7 +66,6 @@ App({
     dataGlobal: null
   },
   getPlayerInfo: function() {
-    console.log('getPlayerInfo2')
     var that = getApp();
     wx.request({
       url: 'https://www.bphots.com/wxmini/api/reporter/info',
@@ -86,25 +85,25 @@ App({
   }
 })
 //获取用户信息
-function getPlayerInfo() {
-  console.log('getPlayerInfo3')
-  var that = getApp();
-  wx.request({
-    url: 'https://www.bphots.com/wxmini/api/reporter/info',
-    header: {
-      'sessionid': that.globalData.sessionId
-    },
-    method: 'GET',
-    success: function (info) {
-      if (info.data.data != null) {
-        that.globalData.playerId = info.data.data.PlayerId
-        that.globalData.lastWeekNumber = info.data.data.LastWeekNumber
-        getGlobaldata(that)
-      }
-    },
-    fail: function (e) { }
-  })
-}
+// function getPlayerInfo() {
+//   console.log('getPlayerInfo3')
+//   var that = getApp();
+//   wx.request({
+//     url: 'https://www.bphots.com/wxmini/api/reporter/info',
+//     header: {
+//       'sessionid': that.globalData.sessionId
+//     },
+//     method: 'GET',
+//     success: function (info) {
+//       if (info.data.data != null) {
+//         that.globalData.playerId = info.data.data.PlayerId
+//         that.globalData.lastWeekNumber = info.data.data.LastWeekNumber
+//         getGlobaldata(that)
+//       }
+//     },
+//     fail: function (e) { }
+//   })
+// }
 //获取映射
 function getPresets(that) {
   wx.request({

@@ -1,7 +1,7 @@
 <!--pages/login/login.wxml-->
 <view class='container' style='align-items:center;background-color: #4a196b;height: {{windowH}}px;'>
   <form style='width:100%;' bindsubmit="formSubmit" bindreset="formReset">
-    <!-- <button open-type='getUserInfo'>获取授权</button> -->
+     <button open-type='getUserInfo'>获取授权</button> 
     <view class='container'>
       <image src='../../image/logo.png' class='logo' />
       <view class='title text-wheat'>背锅周报</view>

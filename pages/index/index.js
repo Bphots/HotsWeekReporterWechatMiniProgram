@@ -1,10 +1,14 @@
 //index.js
+import * as echarts from '../../ec-canvas/echarts';
 const app = getApp()
 const presetsJs = require('presets.js')
 const util = require('../../utils/util.js')
 var presets
 Page({
   data: {
+    ec: {
+      lazyLoad: true
+    },
     nickName: '',
     scrollViewId: '',
     events: [],
@@ -27,7 +31,7 @@ Page({
       scrollViewId: 'personal'
     })
   },
-  showToastDeveloping: function () {
+  showToastDeveloping: function() {
     wx.showToast({
       title: '功能开发中……',
       // icon: 'loading',
@@ -35,30 +39,30 @@ Page({
       mask: true
     })
   },
-  showCounterMore: function () {
+  showCounterMore: function() {
     this.showToastDeveloping()
   },
-  showEventsMore: function () {
+  showEventsMore: function() {
     this.showToastDeveloping()
   },
-  medalDraw: function () {
+  medalDraw: function() {
     this.showToastDeveloping()
   },
-  numberFormat: function (number, decimals, dec_point, thousands_sep) {
+  numberFormat: function(number, decimals, dec_point, thousands_sep) {
     /*
-    * 参数说明：
-    * number：要格式化的数字
-    * decimals：保留几位小数
-    * dec_point：小数点符号
-    * thousands_sep：千分位符号
-    * */
+     * 参数说明：
+     * number：要格式化的数字
+     * decimals：保留几位小数
+     * dec_point：小数点符号
+     * thousands_sep：千分位符号
+     * */
     number = (number + '').replace(/[^0-9+-Ee.]/g, '');
     var n = !isFinite(+number) ? 0 : +number,
       prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
       sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
       dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
       s = '',
-      toFixedFix = function (n, prec) {
+      toFixedFix = function(n, prec) {
         var k = Math.pow(10, prec);
         return '' + Math.ceil(n * k) / k;
       };
@@ -75,24 +79,12 @@ Page({
     }
     return s.join(dec);
   },
-  onLoad: function() {
+  onReady: function() {
+    // 获取组件
     var that = this;
-    presets = app.globalData.presets
-    wx.showLoading({
-      title: '请稍候...',
-    })
-    wx.getStorage({
-      key: 'nickName',
-      success: function(res) {
-        that.setData({
-          nickName: res.data,
-          subscription: true
-        })
-      },
-    })
     wx.request({
-      // url: 'https://www.bphots.com/week/api/report/personal/' + app.globalData.lastWeekNumber + '/' + app.globalData.playerId,
-      url: 'https://www.bphots.com/week/api/report/personal/2533/681',
+      url: 'https://www.bphots.com/week/api/report/personal/' + app.globalData.lastWeekNumber + '/' + app.globalData.playerId,
+      // url: 'https://www.bphots.com/week/api/report/personal/2533/681',
       header: {
         'sessionid': app.globalData.sessionId
       },
@@ -118,6 +110,7 @@ Page({
           }
         }
         var counter = presetsJs.getCounter()
+        that.init()
         that.setData({
           WeekBasic: counter.WeekBasic(),
           WeekGlobalBasic: counter.WeekGlobalBasic(),
@@ -133,5 +126,92 @@ Page({
         console.log(e);
       }
     })
-  }
+  },
+  onLoad: function() {
+    this.ecComponent = this.selectComponent('#mychart-dom-bar');
+    var that = this;
+    presets = app.globalData.presets
+    wx.showLoading({
+      title: '请稍候...',
+    })
+    wx.getStorage({
+      key: 'nickName',
+      success: function(res) {
+        that.setData({
+          nickName: res.data,
+          subscription: true
+        })
+      },
+    })
+  },
+  // 点击按钮后初始化图表
+  init: function() {
+    this.ecComponent.init((canvas, width, height) => {
+      // 获取组件的 canvas、width、height 后的回调函数
+      // 在这里初始化图表
+      const chart = echarts.init(canvas, null, {
+        width: width,
+        height: height
+      });
+      setOption(chart);
+
+      // 将图表实例绑定到 this 上，可以在其他成员函数（如 dispose）中访问
+      this.chart = chart;
+
+      // 注意这里一定要返回 chart 实例，否则会影响事件处理等
+      return chart;
+    });
+  },
 })
+
+function setOption(chart) {
+  var option = {
+    backgroundColor: "#ffffff",
+    color: ["#37A2DA", "#FF9F7F"],
+    tooltip: {},
+    xAxis: {
+      show: false
+    },
+    yAxis: {
+      show: false
+    },
+    radar: {
+      // shape: 'circle',
+      indicator: [{
+          name: 'KDA',
+          max: 100
+        },
+        {
+          name: '击杀',
+          max: 100
+        },
+        {
+          name: '阵亡',
+          max: 100
+        },
+        {
+          name: '雇佣兵',
+          max: 100
+        },
+        {
+          name: '经验',
+          max: 100
+        }
+      ]
+    },
+    series: [{
+      name: '个人 vs 全球',
+      type: 'radar',
+      data: [{
+          value: [50, 50, 50, 50, 50, 50],
+          name: '个人'
+        },
+        {
+          value: [60, 60, 60, 60, 60, 60],
+          name: '全球'
+        }
+      ]
+    }]
+  };
+  chart.setOption(option);
+}

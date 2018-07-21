@@ -24,7 +24,7 @@ var timestamptotime = function(time) {
   return Y + M + D + h + m + s;
 }
 var counter = {
-  "WeekBasic": function () {
+  "WeekBasic": function() {
     var Time = Math.round(dataPersonal.PlayerBase.game_length.sum / 60)
     var Games = dataPersonal.PlayerBase.game_total.sum
     var Win = dataPersonal.PlayerBase.game_win.sum
@@ -45,7 +45,7 @@ var counter = {
     ]
     return res[lang]
   },
-  "WeekGlobalBasic": function () {
+  "WeekGlobalBasic": function() {
     var Time = Math.round(dataGlobal.PlayerBase.game_length.sum / 60)
     var Games = dataGlobal.PlayerBase.game_total.sum
     var Win = dataGlobal.PlayerBase.game_win.sum
@@ -66,7 +66,7 @@ var counter = {
     ]
     return res[lang]
   },
-  "WeekMostUsed": function () {
+  "WeekMostUsed": function() {
     var HeroID = dataPersonal.PlayerHeroes._sumMax.game_total[0]
     var HeroInf = getHeroInf(HeroID)
     var res = [
@@ -87,7 +87,7 @@ var counter = {
     ]
     return res[lang]
   },
-  "WeekGlobalMostUsed": function () {
+  "WeekGlobalMostUsed": function() {
     var HeroID = dataGlobal.PlayerHeroes._sumMax.game_total[0]
     var HeroInf = getHeroInf(HeroID)
     var res = [
@@ -108,7 +108,7 @@ var counter = {
     ]
     return res[lang]
   },
-  "WeekGlobalHighestWinRate": function () {
+  "WeekGlobalHighestWinRate": function() {
     var highestWinRate = 0
     var highestHero = ''
     for (var HeroID in dataGlobal.PlayerHeroes) {
@@ -134,87 +134,104 @@ var counter = {
   },
   "WeekQuickMatch_length": function() {
     var Time = Math.round(dataPersonal.PlayerBase.game_length_QuickMatch.sum / 60)
-    return [
+    var res = [
       [
         ["Quick Match Length", Time + " minutes"],
+      ],
+      [
         ["快速比赛时长", Time + " 分钟"],
-      ]
+      ],
     ]
+    return res[lang]
   },
-  "week_QuickMatch_avg_length": [
-    ["Quick Match Avg Length", "快速比赛平均时长"],
-    function() {
-      var Time = dataPersonal.PlayerBase.game_length_QuickMatch.sum
-      var Count = dataPersonal.PlayerBase.game_total_QuickMatch.sum
-      return Count > 0 ? [
-        ((Time / 60) / Count).toFixed(0) + " minutes",
-        ((Time / 60) / Count).toFixed(0) + " 分钟",
-      ] : false;
-    }
-  ],
-  "week_HeroLeague_length": [
-    ["Hero League Length", "英雄联赛时长"],
-    function() {
-      var Time = Math.round(dataPersonal.PlayerBase.game_length_HeroLeague.sum / 60)
-      return [
-        Time + " minutes",
-        Time + " 分钟"
-      ]
-    }
-  ],
-  "week_HeroLeague_avg_length": [
-    ["Hero League Avg Length", "英雄联赛平均时长"],
-    function() {
-      var Time = dataPersonal.PlayerBase.game_length_HeroLeague.sum / 60
-      var Games = dataPersonal.PlayerBase.game_total_HeroLeague.sum
-      return Games > 0 ? [
-        (Time / Games).toFixed(0) + " minutes",
-        (Time / Games).toFixed(0) + " 分钟",
-      ] : false;
-    }
-  ],
-  "week_TeamLeague_length": [
-    ["Team League Length", "团队联赛时长"],
-    function() {
-      var Time = Math.round(dataPersonal.PlayerBase.game_length_TeamLeague.sum / 60)
-      return [
-        Time + " minutes",
-        Time + " 分钟"
-      ]
-    }
-  ],
-  "week_TeamLeague_avg_length": [
-    ["Team League Avg Length", "团队联赛平均时长"],
-    function() {
-      var Time = dataPersonal.PlayerBase.game_length_TeamLeague.sum
-      var Games = dataPersonal.PlayerBase.game_total_TeamLeague.sum
-      return Games > 0 ? [
-        (Time / Games / 60).toFixed(0) + " minutes",
-        (Time / Games / 60).toFixed(0) + " 分钟",
-      ] : false;
-    }
-  ],
-  "week_UnrankedDraft_length": [
-    ["Unranked Draft Length", "非排名模式时长"],
-    function() {
-      var Time = Math.round(dataPersonal.PlayerBase.game_length_UnrankedDraft.sum / 60)
-      return [
-        Time + " minutes",
-        Time + " 分钟"
-      ]
-    }
-  ],
-  "week_UnrankedDraft_avg_length": [
-    ["Unranked Draft Avg Length", "非排名模式平均时长"],
-    function() {
-      var Time = dataPersonal.PlayerBase.game_length_UnrankedDraft.sum
-      var Games = dataPersonal.PlayerBase.game_total_UnrankedDraft.sum
-      return Games > 0 ? [
-        (Time / Games / 60).toFixed(0) + " minutes",
-        (Time / Games / 60).toFixed(0) + " 分钟",
-      ] : false;
-    }
-  ],
+  "week_QuickMatch_avg_length": function() {
+    var Time = dataPersonal.PlayerBase.game_length_QuickMatch.sum
+    var Count = dataPersonal.PlayerBase.game_total_QuickMatch.sum
+    var res = [
+      [
+        ["Quick Match Avg Length", Count > 0 ? ((Time / 60) / Count).toFixed(0) + " mins" : ''],
+      ],
+      [
+        ["快速比赛平均时长", Count > 0 ? ((Time / 60) / Count).toFixed(0) + " 分钟" : ''],
+      ],
+    ]
+    return res[lang]
+  },
+  "week_HeroLeague_length": function() {
+    var Time = Math.round(dataPersonal.PlayerBase.game_length_HeroLeague.sum / 60)
+    var res = [
+      [
+        ["Hero League Length", Time + " mins"],
+      ],
+      [
+        ["英雄联赛时长", Time + " 分钟"],
+      ],
+    ]
+    return res[lang]
+  },
+  "week_HeroLeague_avg_length": function() {
+    var Time = dataPersonal.PlayerBase.game_length_HeroLeague.sum / 60
+    var Games = dataPersonal.PlayerBase.game_total_HeroLeague.sum
+    var res = [
+      [
+        ["Hero League Avg Length", Games > 0 ? (Time / Games).toFixed(0) + " mins" : ''],
+      ],
+      [
+        ["英雄联赛平均时长", Games > 0 ? (Time / Games).toFixed(0) + " 分钟" : ''],
+      ],
+    ]
+    return res[lang]
+  },
+  "week_TeamLeague_length": function() {
+    var Time = Math.round(dataPersonal.PlayerBase.game_length_TeamLeague.sum / 60)
+    var res = [
+      [
+        ["Team League Length", Time + " mins"],
+      ],
+      [
+        ["团队联赛时长", Time + " 分钟"],
+      ],
+    ]
+    return res[lang]
+  },
+  "week_TeamLeague_avg_length": function() {
+    var Time = dataPersonal.PlayerBase.game_length_TeamLeague.sum
+    var Games = dataPersonal.PlayerBase.game_total_TeamLeague.sum
+    var res = [
+      [
+        ["Team League Avg Length", Games > 0 ? (Time / Games / 60).toFixed(0) + " mins" : ''],
+      ],
+      [
+        ["团队联赛平均时长", Games > 0 ? (Time / Games / 60).toFixed(0) + " 分钟" : ''],
+      ],
+    ]
+    return res[lang]
+  },
+  "week_UnrankedDraft_length": function() {
+    var Time = Math.round(dataPersonal.PlayerBase.game_length_UnrankedDraft.sum / 60)
+    var res = [
+      [
+        ["Unranked Draft Length", Time + " mins"],
+      ],
+      [
+        ["非排名模式时长", Time + " 分钟"],
+      ],
+    ]
+    return res[lang]
+  },
+  "week_UnrankedDraft_avg_length": function() {
+    var Time = dataPersonal.PlayerBase.game_length_UnrankedDraft.sum
+    var Games = dataPersonal.PlayerBase.game_total_UnrankedDraft.sum
+    var res = [
+      [
+        ["Unranked Draft Avg Length", Games > 0 ? (Time / Games / 60).toFixed(0) + " mins" : ''],
+      ],
+      [
+        ["非排名模式平均时长", Games > 0 ? (Time / Games / 60).toFixed(0) + " 分钟" : ''],
+      ],
+    ]
+    return res[lang]
+  },
   "WeekQuickMatch_total": [
     ["Quick Match Total", "快速比赛总场次"],
     function() {
