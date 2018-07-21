@@ -18,7 +18,7 @@ const formatNumber = n => {
 var parseFields = function (data) {
   var parsedObj = {}
   for (var i in data) {
-    if (i === 'PlayerBase') {
+    if (i === 'PlayerBase' || i === 'PlayerRankings') {
       parsedObj[i] = matchPresets(data[i])
     } else {
       parsedObj[i] = {}
@@ -30,6 +30,7 @@ var parseFields = function (data) {
       parsedObj[i]['_sumMax'] = _sumMax
     }
   }
+  console.log(parsedObj)
   return parsedObj
 }
 var matchPresets = function (_data,) {
