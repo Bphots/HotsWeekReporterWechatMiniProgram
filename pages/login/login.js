@@ -170,7 +170,7 @@ Page({
             })
           } else {
             if (info.data.result == 'Success') {
-
+              app.getPlayerInfo()
               var reg
               switch (info.data.data.region) {
                 case 1:

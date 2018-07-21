@@ -26,61 +26,62 @@
   </view>
   <!-- 中部 -->
   <view class='medium' id='personal'>
-    <view class='title'>我的战绩</view>
-    <view class='desc text-grey'>全球及个人的一周大数据，通过点击下方按钮查看更详尽的内容</view>
+    <view class="title {{counterRange ? 'text-darkred' : ''}}">{{counterRange ? '全球战绩' : '我的战绩'}}</view>
+    <view class="desc {{counterRange ? 'text-darkgrey' : 'text-grey'}}">全球及个人的一周大数据，通过点击下方按钮查看更详尽的内容</view>
     <!-- ///////////// -->
-    <view style=' width:100%;display: flex; flex-direction: row;padding-top: 100rpx;'>
-      <view style='width:50%; text-align:center;color: #000;font-weight:bold;'>游戏时长</view>
-      <view style='width:50%; text-align:center;color: #000;font-weight:bold;'>游戏场次</view>
+    <view class='counter-title'>
+      <view class="counter-title-each {{counterRange ? 'text-darkred' : ''}}">{{ counterRange ? WeekGlobalBasic[0][0] : WeekBasic[0][0]}}</view>
+      <view class="counter-title-each {{counterRange ? 'text-darkred' : ''}}">{{ counterRange ? WeekGlobalBasic[1][0] : WeekBasic[1][0]}}</view>
     </view>
-    <view style='width:100%;display: flex; flex-direction: row;padding-top: 20rpx;'>
-      <view style='width:50%; text-align:center;color: #999;'>{{WeekLength}}</view>
-      <view style='width:50%; text-align:center;color: #999;'>{{WeekTimes}}</view>
-    </view>
-    <!-- ///////////// -->
-    <view style=' width:100%;display: flex; flex-direction: row;padding-top: 100rpx;'>
-      <view style='width:50%; text-align:center;color: #000;font-weight:bold;'>胜利场次</view>
-      <view style='width:50%; text-align:center;color: #000;font-weight:bold;'>本周胜率</view>
-    </view>
-    <view style='width:100%;display: flex; flex-direction: row;padding-top: 20rpx;'>
-      <view style='width:50%; text-align:center;color: #999;'>{{WeekWin}}</view>
-      <view style='width:50%; text-align:center;color: #999;'>{{WeekWinRate}}%</view>
+    <view class='counter-data'>
+      <view class="counter-data-each {{counterRange ? 'text-darkgrey' : ''}}">{{ counterRange ? WeekGlobalBasic[0][1] : WeekBasic[0][1]}}</view>
+      <view class="counter-data-each {{counterRange ? 'text-darkgrey' : ''}}">{{ counterRange ? WeekGlobalBasic[1][1] : WeekBasic[1][1]}}</view>
     </view>
     <!-- ///////////// -->
-    <view style=' width:100%;display: flex; flex-direction: row;padding-top: 100rpx; flex-wrap:wrap'>
-      <view style='width:50%; text-align:center;color: #000;font-weight:bold;'>最常使用英雄</view>
-      <view style='width:50%; text-align:center;color: #000;font-weight:bold;'>{{WeekMostUsed}}胜率</view>
+    <view class='counter-title'>
+      <view class="counter-title-each {{counterRange ? 'text-darkred' : ''}}">{{ counterRange ? WeekGlobalHighestWinRate[0][0] : WeekBasic[2][0]}}</view>
+      <view class="counter-title-each {{counterRange ? 'text-darkred' : ''}}">{{ counterRange ? WeekGlobalHighestWinRate[1][0] : WeekBasic[3][0]}}</view>
     </view>
-    <view style='width:100%;display: flex; flex-direction: row;padding-top: 20rpx;'>
-      <view style='width:50%; text-align:center;color: #999;'>{{WeekMostUsed}}</view>
-      <view style='width:50%; text-align:center;color: #999;'>{{WeekWinRate}}%</view>
+    <view class='counter-data'>
+      <view class="counter-data-each {{counterRange ? 'text-darkgrey' : ''}}">{{ counterRange ? WeekGlobalHighestWinRate[0][1] : WeekBasic[2][1]}}</view>
+      <view class="counter-data-each {{counterRange ? 'text-darkgrey' : ''}}">{{ counterRange ? WeekGlobalHighestWinRate[1][1] : WeekBasic[3][1]}}</view>
     </view>
     <!-- ///////////// -->
-    <button catchtap='changeCounterRange' class='btn btn-purple' style="margin-bottom: 10rpx">切换为全球数据</button>
-    <button catchtap='showCounterMore' class='btn btn-purple' style="margin-top: 10rpx">查看更多</button>
+    <view class='counter-title'>
+      <view class="counter-title-each {{counterRange ? 'text-darkred' : ''}}">{{ counterRange ? WeekGlobalMostUsed[0][0] : WeekMostUsed[0][0]}}</view>
+      <view class="counter-title-each {{counterRange ? 'text-darkred' : ''}}">{{ counterRange ? WeekGlobalMostUsed[4][0] : WeekMostUsed[4][0]}}</view>
+    </view>
+    <view class='counter-data'>
+      <view class="counter-data-each {{counterRange ? 'text-darkgrey' : ''}}">{{ counterRange ? WeekGlobalMostUsed[0][1] : WeekMostUsed[0][1]}}</view>
+      <view class="counter-data-each {{counterRange ? 'text-darkgrey' : ''}}">{{ counterRange ? WeekGlobalMostUsed[4][1] : WeekMostUsed[4][1]}}</view>
+    </view>
+    <!-- ///////////// -->
+    <button wx:if="{{counterRange}}" catchtap='changeCounterRange' class='btn btn-darkred' style="margin-bottom: 10rpx">切换为个人数据</button>
+    <button wx:else catchtap='changeCounterRange' class='btn btn-purple' style="margin-bottom: 10rpx">切换为全球数据</button>
+    <button catchtap='showCounterMore' class="btn {{counterRange ? 'btn-darkred' : 'btn-purple'}}" style="margin-top: 10rpx">查看更多</button>
   </view>
   <!-- 底部 -->
   <template name="events">
-    <view style='width:100%; display: flex;  flex-direction: column;align-items: center;'>
+    <view class='events'>
       <view class='subtitle'>{{title}}</view>
       <view class='desc text-white'>{{content}}</view>
     </view>
   </template>
   <view class='foot'>
     <view class='title text-wheat'>每周事件</view>
-    <swiper autoplay='true' circular='true' interval='3000'>
+    <swiper autoplay='true' circular='true' interval='3000' class='events-swiper'>
       <block wx:for="{{events}}" wx:key="*this">
         <swiper-item>
           <template is='events' data="{{...item}}" />
         </swiper-item>
       </block>
     </swiper>
-    <button catchtap='loginClick' class='btn btn-wheat' hover-class='btn-wheat-hover'>查看更多</button>
+    <button catchtap='showEventsMore' class='btn btn-wheat' hover-class='btn-wheat-hover'>查看更多</button>
   </view>
 
   <view class='medal-draw'>
     <view class='medal-draw-desc'>每周一次抽取随机勋章</view>
     <button catchtap='medalDraw' class='btn btn-purple btn-tighten'>试试手气</button>
   </view>
-  <view class='gametotal'>本周有 100,000,000 盘比赛被记录</view>
+  <view class='gametotal'>本周全球有 {{globalGamesCount}} 盘比赛被记录</view>
 </scroll-view>

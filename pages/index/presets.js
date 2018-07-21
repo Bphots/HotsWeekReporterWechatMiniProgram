@@ -4,6 +4,7 @@ var dataGlobal
 var dataRanking
 var dataPersonal
 var playerInfo
+var lang = 1
 //将Level_count等字段中的对象转为数组
 var object_to_array = function(object) {
   var arr = [];
@@ -23,61 +24,123 @@ var timestamptotime = function(time) {
   return Y + M + D + h + m + s;
 }
 var counter = {
-  "WeekLength": [
-    ["Length", "周时长"],
-    function() {
-      var Time = Math.round(dataPersonal.PlayerBase.game_length.sum / 60)
-      return [
-        Time + " minutes",
-        Time + " 分钟"
+  "WeekBasic": function () {
+    var Time = Math.round(dataPersonal.PlayerBase.game_length.sum / 60)
+    var Games = dataPersonal.PlayerBase.game_total.sum
+    var Win = dataPersonal.PlayerBase.game_win.sum
+    var WinRate = Games ? (Win / Games * 100).toFixed(2) : 0;
+    var res = [
+      [
+        ["Plays", Games + " times"],
+        ["Length", Time + " mins"],
+        ["Win", Win + " times"],
+        ["Win Rate", WinRate + "%"],
+      ],
+      [
+        ["游戏场次", Games + " 局"],
+        ["游戏时长", Time + " 分钟"],
+        ["胜利场次", Win + " 局"],
+        ["本周胜率", WinRate + "%"],
       ]
-    }
-  ],
-  "WeekTimes": [
-    ["Times", "周场次"],
-    function() {
-      var Games = dataPersonal.PlayerBase.game_total.sum
-      return [
-        Games + " times",
-        Games + " 局"
+    ]
+    return res[lang]
+  },
+  "WeekGlobalBasic": function () {
+    var Time = Math.round(dataGlobal.PlayerBase.game_length.sum / 60)
+    var Games = dataGlobal.PlayerBase.game_total.sum
+    var Win = dataGlobal.PlayerBase.game_win.sum
+    var WinRate = Games ? (Win / Games * 100).toFixed(2) : 0;
+    var res = [
+      [
+        ["Plays", Games + " times"],
+        ["Length", Time + " mins"],
+        ["Win", Win + " times"],
+        ["Win Rate", WinRate + "%"],
+      ],
+      [
+        ["游戏场次", Games + " 局"],
+        ["游戏时长", Time + " 分钟"],
+        ["胜利场次", Win + " 局"],
+        ["本周胜率", WinRate + "%"],
       ]
-    }
-  ],
-  "WeekWin": [
-    ["Win", "周胜场"],
-    function() {
-      var Win = dataPersonal.PlayerBase.game_win.sum
-      return [
-        Win + " times",
-        Win + " 局"
-      ]
-    }
-  ],
-  "WeekMostUsed": [
-    ["Most Used Heroes", "使用最多的英雄"],
-    function() {
-      var HeroID = dataPersonal.PlayerHeroes._sumMax.game_total[0]
-      var Games = dataPersonal.PlayerHeroes._sumMax.game_total[1]
+    ]
+    return res[lang]
+  },
+  "WeekMostUsed": function () {
+    var HeroID = dataPersonal.PlayerHeroes._sumMax.game_total[0]
+    var HeroInf = getHeroInf(HeroID)
+    var res = [
+      [
+        ["Most Used", HeroInf.name_en],
+        [HeroInf.name_en + " Plays", HeroInf.Play + " times"],
+        [HeroInf.name_en + " Length", HeroInf.Time + " mins"],
+        [HeroInf.name_en + " Win", HeroInf.Win + " times"],
+        [HeroInf.name_en + " Winrate", HeroInf.WinRate + "%"],
+      ],
+      [
+        ["最常使用", HeroInf.name_cn],
+        [HeroInf.name_cn + "场次", HeroInf.Play + " 次"],
+        [HeroInf.name_cn + "时长", HeroInf.Time + " 分钟"],
+        [HeroInf.name_cn + "获胜", HeroInf.Win + " 次"],
+        [HeroInf.name_cn + "胜率", HeroInf.WinRate + "%"],
+      ],
+    ]
+    return res[lang]
+  },
+  "WeekGlobalMostUsed": function () {
+    var HeroID = dataGlobal.PlayerHeroes._sumMax.game_total[0]
+    var HeroInf = getHeroInf(HeroID)
+    var res = [
+      [
+        ["Most Used", HeroInf.name_en],
+        [HeroInf.name_en + " Plays", HeroInf.GlobalPlay + " times"],
+        [HeroInf.name_en + " Length", HeroInf.GlobalTime + " mins"],
+        [HeroInf.name_en + " Win", HeroInf.GlobalWin + " times"],
+        [HeroInf.name_en + " Winrate", HeroInf.GlobalWinRate + "%"],
+      ],
+      [
+        ["最常使用", HeroInf.name_cn],
+        [HeroInf.name_cn + "场次", HeroInf.GlobalPlay + " 次"],
+        [HeroInf.name_cn + "时长", HeroInf.GlobalTime + " 分钟"],
+        [HeroInf.name_cn + "获胜", HeroInf.GlobalWin + " 次"],
+        [HeroInf.name_cn + "胜率", HeroInf.GlobalWinRate + "%"],
+      ],
+    ]
+    return res[lang]
+  },
+  "WeekGlobalHighestWinRate": function () {
+    var highestWinRate = 0
+    var highestHero = ''
+    for (var HeroID in dataGlobal.PlayerHeroes) {
       var HeroInf = getHeroInf(HeroID)
-      return [
-        HeroInf.name_en,
-        HeroInf.name_cn,
-        HeroInf.WinRate
-        // "Hero " + HeroInf.name_en + " was used " + Games + " times",
-        // "英雄 " + HeroInf.name_cn + " 被使用了 " + Games + " 次"
-      ]
+      if (!HeroInf) continue
+      var winRate = HeroInf.GlobalWinRate
+      if (winRate > highestWinRate) {
+        highestWinRate = winRate
+        highestHero = HeroInf
+      }
     }
-  ],
-  "WeekQuickMatch_length": [
-    ["Quick Match Length", "快速比赛时长"],
-    function() {
-      var Time = Math.round(dataPersonal.PlayerBase.game_length_QuickMatch.sum / 60)
-      return [
-        Time + " minutes",
-        Time + " 分钟"
+    var res = [
+      [
+        ["First Win Rate", highestHero.name_en],
+        [highestHero.name_en + " Winrate", highestHero.GlobalWinRate + "%"],
+      ],
+      [
+        ["最高胜率", highestHero.name_cn],
+        [highestHero.name_cn + "胜率", highestHero.GlobalWinRate + "%"],
+      ],
+    ]
+    return res[lang]
+  },
+  "WeekQuickMatch_length": function() {
+    var Time = Math.round(dataPersonal.PlayerBase.game_length_QuickMatch.sum / 60)
+    return [
+      [
+        ["Quick Match Length", Time + " minutes"],
+        ["快速比赛时长", Time + " 分钟"],
       ]
-    }
-  ],
+    ]
+  },
   "week_QuickMatch_avg_length": [
     ["Quick Match Avg Length", "快速比赛平均时长"],
     function() {
@@ -504,20 +567,6 @@ var counter = {
       return [
         Healing,
         Healing + " 点治疗"
-      ]
-    }
-  ],
-  "WeekWinRate": [
-    ["Win Rate", "周胜率"],
-    function() {
-      var Win = dataPersonal.PlayerBase.game_win.sum
-      var Games = dataPersonal.PlayerBase.game_total.sum
-      if (Games <= 0)
-        return false;
-      var WinRate = (Win / Games * 100).toFixed(2);
-      return [
-        WinRate + "%",
-        WinRate + "%",
       ]
     }
   ],
@@ -1094,18 +1143,6 @@ var counter = {
       return [
         Time,
         Time
-      ]
-    }
-  ],
-  "WeekGlobalMostUsed": [
-    ["Global Most Used Heroes", "全球使用最多的英雄"],
-    function() {
-      var HeroID = dataGlobal.PlayerHeroes._sumMax.game_total[0]
-      var Games = dataGlobal.PlayerHeroes._sumMax.game_total[1]
-      var HeroInf = getHeroInf(HeroID)
-      return [
-        "Hero " + HeroInf.name_en + " was used " + Games + " times",
-        "英雄 " + HeroInf.name_cn + " 被使用了 " + Games + " 次"
       ]
     }
   ],
@@ -2448,20 +2485,30 @@ function setDataGlobal(data) {
 }
 
 function getHeroInf(HeroID) {
-  if (dataPersonal.PlayerHeroes[HeroID] == undefined || app.globalData.heroes[HeroID] == undefined)
-    return {
-      "name_en": 'Unknow',
-      "name_cn": '未知',
-    }
-  var Games = dataPersonal.PlayerHeroes[HeroID].game_total.sum
-  var WinRate = (dataPersonal.PlayerHeroes[HeroID].game_win.sum / dataPersonal.PlayerHeroes[HeroID].game_total.sum * 100).toFixed(2)
-  var GlobalWinRate = (app.globalData.dataGlobal.PlayerHeroes[HeroID].game_win.sum / app.globalData.dataGlobal.PlayerHeroes[HeroID].game_total.sum * 100).toFixed(2)
+  if (app.globalData.heroes[HeroID] == undefined) return false
+  if (dataPersonal.PlayerHeroes[HeroID] != undefined) {
+    var Play = dataPersonal.PlayerHeroes[HeroID].game_total.sum
+    var Length = dataPersonal.PlayerHeroes[HeroID].game_length.sum
+    var Win = dataPersonal.PlayerHeroes[HeroID].game_win.sum
+    var WinRate = Play ? (Win / Play * 100).toFixed(2) : 0
+  }
+  if (dataGlobal.PlayerHeroes[HeroID] != undefined) {
+    var GlobalPlay = dataGlobal.PlayerHeroes[HeroID].game_total.sum
+    var GlobalLength = dataGlobal.PlayerHeroes[HeroID].game_length.sum
+    var GlobalWin = dataGlobal.PlayerHeroes[HeroID].game_win.sum
+    var GlobalWinRate = GlobalPlay ? (GlobalWin / GlobalPlay * 100).toFixed(2) : 0
+  }
   return {
-    "Games": Games,
-    "WinRate": WinRate,
-    "GlobalWinRate": GlobalWinRate,
-    "name_en": app.globalData.heroes[HeroID].name['en-US'].full,
-    "name_cn": app.globalData.heroes[HeroID].name['zh-CN'].full,
+    name_en: app.globalData.heroes[HeroID].name['en-US'].full,
+    name_cn: app.globalData.heroes[HeroID].name['zh-CN'].full,
+    Play: Play,
+    Length: Length,
+    Win: Win,
+    WinRate: WinRate,
+    GlobalPlay: GlobalPlay,
+    GlobalLength: GlobalLength,
+    GlobalWin: GlobalWin,
+    GlobalWinRate: GlobalWinRate,
   }
 }
 

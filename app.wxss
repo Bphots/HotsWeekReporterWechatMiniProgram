@@ -56,15 +56,23 @@
 }
 
 .text-white {
-  color: #fff;
+  color: #fff !important;
 }
 
 .text-wheat {
-  color: wheat;
+  color: wheat !important;
 }
 
 .text-grey {
-  color: #999;
+  color: #999 !important;
+}
+
+.text-darkgrey {
+  color: #646464 !important;
+}
+
+.text-darkred {
+  color: #990000 !important;
 }
 
 .foot {
@@ -104,6 +112,8 @@
   align-items: center;
   margin: 100rpx auto;
   font-size: 36rpx;
+  border-style: solid;
+  border-width: 1px;
 }
 
 .btn-s {
@@ -121,8 +131,6 @@
   background-color: wheat;
   color: #000;
   border-color: wheat;
-  border-style: solid;
-  border-width: 1px;
 }
 
 .btn-wheat-hover {
@@ -132,6 +140,9 @@
 .btn-purple {
   color: #4a196b;
   border-color: #4a196b;
-  border-style: solid;
-  border-width: 1px;
+}
+
+.btn-darkred {
+  color: #990000;
+  border-color: #990000;
 }
