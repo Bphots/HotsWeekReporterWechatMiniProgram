@@ -19,17 +19,17 @@ Page({
     //周报按钮
     firstTime: null,
     // 开放周报
-    open: false
-
+    open: false,
+    auth: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     var that = this;
     wx.getSystemInfo({
-      success: function (res) {
+      success: function(res) {
         that.setData({
           windowH: res.windowHeight
         });
@@ -38,18 +38,18 @@ Page({
 
     wx.getStorage({
       key: 'nickName',
-      success: function (res) {
-        that.data.nickName = res.data
-        that.data.subscription = true
-        that.setData({
-          nickName: res.data,
-          subscription: true
-        })
+      success: function(res) {
+        if (res.data) {
+          that.setData({
+            nickName: res.data,
+            subscription: true
+          })
+        }
       },
     })
     wx.getStorage({
       key: 'region',
-      success: function (res) {
+      success: function(res) {
         var reg
         switch (res.data) {
           case 1:
@@ -93,57 +93,62 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function() {
 
   },
-  bindRegionChange: function (e) {
+  bindRegionChange: function(e) {
     this.setData({
       regionIndex: e.detail.value
     })
   },
-  formSubmit: function (e) {
+  wxAuth: function (e) {
+    this.setData({
+      auth: true
+    })
+  },
+  formSubmit: function(e) {
     var that = this
     wx.showLoading({
       title: '请稍候...',
@@ -160,7 +165,7 @@ Page({
           'sessionid': app.globalData.sessionId
         },
         method: 'POST',
-        success: function (info) {
+        success: function(info) {
           wx.hideLoading()
           var result = info.data.result
           if (info.data.result == null) {
@@ -216,7 +221,7 @@ Page({
             }
           }
         },
-        fail: function (e) {
+        fail: function(e) {
           wx.hideLoading()
         }
       })
@@ -227,7 +232,7 @@ Page({
       })
     }
   },
-  cancel: function (e) {
+  cancel: function(e) {
     var that = this
     console.log('取消订阅')
     wx.request({
@@ -239,7 +244,7 @@ Page({
         'sessionid': app.globalData.sessionId
       },
       method: 'POST',
-      success: function (info) {
+      success: function(info) {
         wx.hideLoading()
         var result = info.data.result
         if (info.data.result == null) {
@@ -260,11 +265,11 @@ Page({
             })
             wx.removeStorage({
               key: 'nickName',
-              success: function (res) { },
+              success: function(res) {},
             })
             wx.removeStorage({
               key: 'region',
-              success: function (res) { },
+              success: function(res) {},
             })
           } else {
             wx.showToast({
@@ -274,12 +279,12 @@ Page({
           }
         }
       },
-      fail: function (e) {
+      fail: function(e) {
         wx.hideLoading()
       }
     })
   },
-  week: function () {
+  week: function() {
     if (this.data.open) {
       wx.navigateTo({
         url: '../index/index',

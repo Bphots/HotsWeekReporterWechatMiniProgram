@@ -20,6 +20,7 @@ Page({
     WeekMostUsed: [],
     WeekGlobalMostUsed: [],
     WeekGlobalHighestWinRate: [],
+    radarData: [0, 0, 0, 0, 0]
   },
   changeCounterRange: function() {
     var range = this.data.counterRange ? 0 : 1
@@ -110,6 +111,9 @@ Page({
             localEvents.push(e)
           }
         }
+        console.log(that.data.radarData)
+        that.data.radarData = presetsJs.buildRadar()
+        console.log(that.data.radarData)
         var counter = presetsJs.getCounter()
         // console.log('request data')
         that.init()
@@ -159,7 +163,7 @@ Page({
       });
       canvas.setChart(chart);
       // console.log('chart setted', echarts)
-      setOption(chart);
+      this.setOption(chart);
       // console.log('option setted')
 
       // 将图表实例绑定到 this 上，可以在其他成员函数（如 dispose）中访问
@@ -169,22 +173,20 @@ Page({
       return chart;
     });
   },
-})
-
-function setOption(chart) {
-  var option = {
-    backgroundColor: "#ffffff",
-    color: ["#37A2DA", "#FF9F7F"],
-    tooltip: {},
-    xAxis: {
-      show: false
-    },
-    yAxis: {
-      show: false
-    },
-    radar: {
-      // shape: 'circle',
-      indicator: [{
+  setOption: function(chart) {
+    var option = {
+      backgroundColor: "#ffffff",
+      color: ["#37A2DA", "#FF9F7F"],
+      tooltip: {},
+      xAxis: {
+        show: false
+      },
+      yAxis: {
+        show: false
+      },
+      radar: {
+        // shape: 'circle',
+        indicator: [{
           name: 'KDA',
           max: 100
         },
@@ -204,21 +206,22 @@ function setOption(chart) {
           name: '经验',
           max: 100
         }
-      ]
-    },
-    series: [{
-      name: '个人 vs 全球',
-      type: 'radar',
-      data: [{
-          value: [50, 50, 50, 50, 50, 50],
+        ]
+      },
+      series: [{
+        name: '个人 vs 全球',
+        type: 'radar',
+        data: [{
+          value: this.data.radarData,
           name: '个人'
         },
         {
           value: [60, 60, 60, 60, 60, 60],
           name: '全球'
         }
-      ]
-    }]
-  };
-  chart.setOption(option);
-}
+        ]
+      }]
+    };
+    chart.setOption(option);
+  }
+})
