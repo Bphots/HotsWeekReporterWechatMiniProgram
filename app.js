@@ -5,47 +5,11 @@ App({
     var that = this;
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
+    
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
     // 登录
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        var code = res.code; //获取code
-        wx.getUserInfo({ //得到rawData, signatrue, encryptData
-          success: function(data) {
-            var rawData = data.rawData;
-            var signature = data.signature;
-            var encryptedData = data.encryptedData;
-            var iv = data.iv;
-            wx.request({
-              url: 'https://www.bphots.com/wxmini/api/login',
-              data: {
-                "code": code,
-                "rawData": rawData,
-                "signature": signature,
-                'iv': iv,
-                'encryptedData': encryptedData
-              },
-              method: 'GET',
-              success: function(info) {
-                that.globalData.sessionId = info.data.data.sessionid
-                console.log('getPlayerInfo1')
-                that.getPlayerInfo(); // 这个方法调用接口获取玩家名，无需传参
-              },
-              fail: function(e) {
-                console.log(e);
-              }
-            })
-          },
-          fail: function(data) {
-            console.log(data);
-          }
-
-        })
-      }
-    })
-
+    this.login(that)
     getPresets(that)
     getHeroInfo(that)
   },
@@ -65,22 +29,45 @@ App({
     //全球数据
     dataGlobal: null
   },
-  getPlayerInfo: function() {
-    var that = getApp();
-    wx.request({
-      url: 'https://www.bphots.com/wxmini/api/reporter/info',
-      header: {
-        'sessionid': that.globalData.sessionId
-      },
-      method: 'GET',
-      success: function(info) {
-        if (info.data.data != null) {
-          that.globalData.playerId = info.data.data.PlayerId
-          that.globalData.lastWeekNumber = info.data.data.LastWeekNumber
-          getGlobaldata(that)
-        }
-      },
-      fail: function(e) {}
+  login: function(that) {
+    wx.login({
+      success: res => {
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        var code = res.code; //获取code
+        wx.getUserInfo({ //得到rawData, signatrue, encryptData
+          success: function (data) {
+            var rawData = data.rawData;
+            var signature = data.signature;
+            var encryptedData = data.encryptedData;
+            var iv = data.iv;
+            wx.request({
+              url: 'https://www.bphots.com/wxmini/api/login',
+              data: {
+                "code": code,
+                "rawData": rawData,
+                "signature": signature,
+                'iv': iv,
+                'encryptedData': encryptedData
+              },
+              method: 'GET',
+              success: function (info) {
+                that.globalData.sessionId = info.data.data.sessionid
+                console.log(that.globalData.sessionId)
+                // that.getPlayerInfo(); // 这个方法调用接口获取玩家名，无需传参
+
+                getGlobaldata(that)
+              },
+              fail: function (e) {
+                console.log(e);
+              }
+            })
+          },
+          fail: function (data) {
+            console.log(data);
+          }
+
+        })
+      }
     })
   }
 })

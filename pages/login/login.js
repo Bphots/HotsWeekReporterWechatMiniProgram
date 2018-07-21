@@ -144,8 +144,86 @@ Page({
     })
   },
   wxAuth: function (e) {
+    var that = this
+    console.log(this.subscription);
+    if (this.subscription != true)
+    {
+      console.log(app.globalData.sessionId);
+      if (app.globalData.sessionId == null) {
+        console.log('login');
+        wx.login({
+          success: res => {
+            // 发送 res.code 到后台换取 openId, sessionKey, unionId
+            var code = res.code; //获取code
+            wx.getUserInfo({ //得到rawData, signatrue, encryptData
+              success: function (data) {
+                var rawData = data.rawData;
+                var signature = data.signature;
+                var encryptedData = data.encryptedData;
+                var iv = data.iv;
+                wx.request({
+                  url: 'https://www.bphots.com/wxmini/api/login',
+                  data: {
+                    "code": code,
+                    "rawData": rawData,
+                    "signature": signature,
+                    'iv': iv,
+                    'encryptedData': encryptedData
+                  },
+                  method: 'GET',
+                  success: function (info) {
+                    app.globalData.sessionId = info.data.data.sessionid
+                    that.getPlayerInfo()
+                  },
+                  fail: function (e) {
+                    console.log(e);
+                  }
+                })
+              },
+              fail: function (data) {
+                console.log(data);
+              }
+
+            })
+          }
+        })
+      }
+      else
+      {
+        this.getPlayerInfo()
+      }
+    }
     this.setData({
-      auth: true
+    auth: true
+    })
+  },
+  getPlayerInfo: function () {
+    var that = this
+    console.log(app.globalData.sessionId)
+    wx.request({
+      url: 'https://www.bphots.com/wxmini/api/reporter/info',
+      header: {
+        'sessionid': app.globalData.sessionId
+      },
+      method: 'GET',
+      success: function (info) {
+        if (info.data.data != null) {
+          console.log(info.data.data)
+          app.globalData.playerId = info.data.data.PlayerId
+          app.globalData.lastWeekNumber = info.data.data.LastWeekNumber
+          wx.setStorage({
+            key: 'nickName',
+            data: info.data.data.Name,
+          })
+          wx.setStorage({
+            key: 'region',
+            data: info.data.data.BattleNetRegionId,
+          })
+
+          that.onLoad()
+        }
+      },
+      fail: function (e) { }
     })
   },
   formSubmit: function(e) {
