@@ -121,7 +121,7 @@ var counter = {
         [highestHero.name_en + " Winrate", highestHero.GlobalWinRate + "%"],
       ],
       [
-        ["最高胜率", highestHero.name_cn],
+        ["全球最高胜率", highestHero.name_cn],
         [highestHero.name_cn + "胜率", highestHero.GlobalWinRate + "%"],
       ],
     ]
@@ -2767,7 +2767,11 @@ var buildRadar = function () {
   for (var i in items) {
     var rankPersonal = dataPersonal.PlayerRankings[items[i]]
     var rankGlobal = dataGlobal.PlayerRankings[items[i]][0]
-    radar.push(Math.round(discount(1 - (rankPersonal / rankGlobal)) * 100))
+    if (rankPersonal && rankGlobal) {
+      radar.push(Math.round(discount(1 - (rankPersonal / rankGlobal)) * 100))
+    } else {
+      radar.push(50)      
+    }
   }
   return radar
 }

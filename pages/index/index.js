@@ -92,40 +92,54 @@ Page({
       },
       method: 'POST',
       success: function(info) {
-        wx.hideLoading()
-        var presetsObj = util.parseFields(info.data)
-        presetsJs.setDataPersonal(presetsObj)
-        presetsJs.setDataGlobal(app.globalData.dataGlobal)
-
-        var localEvents = [];
-        var events = presetsJs.getEvents()
-        for (var i in events) {
-          var item = events[i]
-          var title = item[0]
-          var content = item[1]()
-          if (content !== false) {
-            var e = {
-              title: title[1],
-              content: content[1]
+        if (!info.data) {
+          wx.hideLoading()
+          wx.showModal({
+            title: '抱歉',
+            content: '我们没有你本周的对战记录TwT',
+            showCancel: false,
+            success: function (res) {
+              wx.navigateBack({
+                delta: -1
+              });
             }
-            localEvents.push(e)
+          })
+        } else {
+          wx.hideLoading()
+          var presetsObj = util.parseFields(info.data)
+          presetsJs.setDataPersonal(presetsObj)
+          presetsJs.setDataGlobal(app.globalData.dataGlobal)
+
+          var localEvents = [];
+          var events = presetsJs.getEvents()
+          for (var i in events) {
+            var item = events[i]
+            var title = item[0]
+            var content = item[1]()
+            if (content !== false) {
+              var e = {
+                title: title[1],
+                content: content[1]
+              }
+              localEvents.push(e)
+            }
           }
+          console.log(that.data.radarData)
+          that.data.radarData = presetsJs.buildRadar()
+          console.log(that.data.radarData)
+          var counter = presetsJs.getCounter()
+          // console.log('request data')
+          that.init()
+          that.setData({
+            WeekBasic: counter.WeekBasic(),
+            WeekGlobalBasic: counter.WeekGlobalBasic(),
+            WeekGlobalMostUsed: counter.WeekGlobalMostUsed(),
+            WeekGlobalHighestWinRate: counter.WeekGlobalHighestWinRate(),
+            WeekMostUsed: counter.WeekMostUsed(),
+            events: localEvents,
+            globalGamesCount: that.numberFormat(counter.WeekGlobalBasic()[0][1].split(' ')[0], 0, ".", ","),
+          })
         }
-        console.log(that.data.radarData)
-        that.data.radarData = presetsJs.buildRadar()
-        console.log(that.data.radarData)
-        var counter = presetsJs.getCounter()
-        // console.log('request data')
-        that.init()
-        that.setData({
-          WeekBasic: counter.WeekBasic(),
-          WeekGlobalBasic: counter.WeekGlobalBasic(),
-          WeekGlobalMostUsed: counter.WeekGlobalMostUsed(),
-          WeekGlobalHighestWinRate: counter.WeekGlobalHighestWinRate(),
-          WeekMostUsed: counter.WeekMostUsed(),
-          events: localEvents,
-          globalGamesCount: that.numberFormat(counter.WeekGlobalBasic()[0][1].split(' ')[0], 0, ".", ","),
-        })
       },
       fail: function(e) {
         wx.hideLoading()
