@@ -8,8 +8,6 @@ App({
     
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
-    // 登录
-    this.login(that)
     getPresets(that)
     getHeroInfo(that)
   },
@@ -30,6 +28,7 @@ App({
     dataGlobal: null,
     auth: false
   },
+
   login: function(that) {
     wx.login({
       success: res => {
@@ -57,9 +56,9 @@ App({
                 // that.getPlayerInfo(); // 这个方法调用接口获取玩家名，无需传参
 
                 // getGlobaldata(that)
-                that.globalData.auth = true
+                // that.globalData.auth = true
                 console.log(123)
-                
+
               },
               fail: function (e) {
                 console.log(e);

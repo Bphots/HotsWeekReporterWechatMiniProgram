@@ -1864,14 +1864,15 @@ var events = {
   ],
   "HeroOfLife": [
     ["Hero Of Life", "本命英雄"],
-    function() {
+    function () {
       var HeroID = dataPersonal.PlayerHeroes._sumMax.game_total[0]
       var Games = dataPersonal.PlayerHeroes._sumMax.game_total[1]
       var WinRate = (dataPersonal.PlayerHeroes[HeroID].game_win.sum / dataPersonal.PlayerHeroes[HeroID].game_total.sum * 100).toFixed(2)
+      var HeroInf = getHeroInf(HeroID)
       var limit = WinRate > 60 && Games >= 10
       return limit ? [
-        "You have played Hero " + HeroID + " for" + Games + "times, with " + WinRate + "% winning rate.",
-        "你使用了英雄 " + HeroID + " 上场了 " + Games + "次，胜率达到了" + WinRate + "%",
+        "You have played Hero " + HeroInf.name_en + " for" + Games + "times, with " + WinRate + "% winning rate.",
+        "你使用了英雄 " + HeroInf.name_cn + " 上场了 " + Games + "次，胜率达到了" + WinRate + "%",
       ] : false
     }
   ],

@@ -5,16 +5,22 @@
     <view class='container'>
       <image src='../../image/logo.png' class='logo' />
       <view class='title text-wheat'>背锅周报</view>
+      <!-- 鉴权中 -->
+      <block wx:if="{{auth === null}}">
+        <view class='desc text-wheat' style='font-size: 34rpx'>
+          正在加载中……
+        </view>
+      </block>
       <!-- 未授权 -->
-      <block wx:if="{{!auth}}">
+      <block wx:if="{{auth === false}}">
         <button open-type='getUserInfo' bindgetuserinfo="wxAuth" class='btn btn-wheat' hover-class='btn-wheat-hover'>微信登录</button>
       </block>
       <!-- 未订阅 -->
-      <block wx:if="{{!subscription && auth}}">
+      <block wx:if="{{subscription === false && auth === true}}">
         <view class='subscribe-container'>
           <input type="text" class="edit" name="name" placeholder="Nova#1234" />
           <picker bindchange="bindRegionChange" value="{{regionIndex}}" range="{{region}}" class='pickerStyle regionPicker'>
-            <view class='text-grey regionPickerView'>
+            <view class='text-wheat regionPickerView'>
               <span>选择地区：{{region[regionIndex]}}</span>
               <image class='pickerArrow' src='/image/spinner_down.png' />
             </view>
@@ -23,7 +29,7 @@
         <button form-type='submit' class='btn btn-wheat' hover-class='btn-wheat-hover'>立即订阅</button>
       </block>
       <!-- 已订阅 -->
-      <block wx:if="{{subscription && auth}}">
+      <block wx:if="{{subscription === true && auth === true}}">
         <view class='desc text-wheat' style='font-size: 34rpx'>
           {{nickName}}{{regionName}}
         </view>

@@ -17,12 +17,12 @@ Page({
     //服务器地区
     regionName: '',
     //订阅
-    subscription: false,
+    subscription: null,
     //周报按钮
     firstTime: null,
     // 开放周报
     open: false,
-    auth: false
+    auth: null
   },
 
   /**
@@ -30,6 +30,54 @@ Page({
    */
   onLoad: function(options) {
     var that = this;
+    wx.getSetting({
+      success(res) {
+        if (!res.authSetting['scope.userInfo']) {
+          // 登录
+          that.setData({
+            auth: false
+          })
+          app.login(that)
+        } else {
+          wx.login({
+            success: res => {
+              // 发送 res.code 到后台换取 openId, sessionKey, unionId
+              var code = res.code; //获取code
+              wx.getUserInfo({ //得到rawData, signatrue, encryptData
+                success: function (data) {
+                  var rawData = data.rawData;
+                  var signature = data.signature;
+                  var encryptedData = data.encryptedData;
+                  var iv = data.iv;
+                  wx.request({
+                    url: 'https://www.bphots.com/wxmini/api/login',
+                    data: {
+                      "code": code,
+                      "rawData": rawData,
+                      "signature": signature,
+                      'iv': iv,
+                      'encryptedData': encryptedData
+                    },
+                    method: 'GET',
+                    success: function (info) {
+                      app.globalData.sessionId = info.data.data.sessionid
+                      that.getPlayerInfo()
+                    },
+                    fail: function (e) {
+                      console.log(e);
+                    }
+                  })
+                },
+                fail: function (data) {
+                  console.log(data);
+                }
+
+              })
+            }
+          })
+        }
+      }
+    })
     wx.getSystemInfo({
       success: function(res) {
         that.setData({
@@ -38,45 +86,45 @@ Page({
       }
     })
 
-    wx.getStorage({
-      key: 'nickName',
-      success: function(res) {
-        if (res.data) {
-          that.setData({
-            nickName: res.data,
-            subscription: true
-          })
-        }
-      },
-    })
-    wx.getStorage({
-      key: 'region',
-      success: function(res) {
-        var reg
-        switch (res.data) {
-          case 1:
-            reg = '(美服)'
-            break;
-          case 2:
-            reg = '(欧服)'
-            break;
-          case 3:
-            reg = '(亚服)'
-            break;
-          case 5:
-            reg = ''
-            break;
-          default:
-            reg = '(未知)'
-            break;
-        }
-        that.data.regionName = reg
-        console.log(reg)
-        that.setData({
-          regionName: reg
-        })
-      },
-    })
+    // wx.getStorage({
+    //   key: 'nickName',
+    //   success: function(res) {
+    //     if (res.data) {
+    //       that.setData({
+    //         nickName: res.data,
+    //         subscription: true
+    //       })
+    //     }
+    //   },
+    // })
+    // wx.getStorage({
+    //   key: 'region',
+    //   success: function(res) {
+    //     var reg
+    //     switch (res.data) {
+    //       case 1:
+    //         reg = '(美服)'
+    //         break;
+    //       case 2:
+    //         reg = '(欧服)'
+    //         break;
+    //       case 3:
+    //         reg = '(亚服)'
+    //         break;
+    //       case 5:
+    //         reg = ''
+    //         break;
+    //       default:
+    //         reg = '(未知)'
+    //         break;
+    //     }
+    //     that.data.regionName = reg
+    //     console.log(reg)
+    //     that.setData({
+    //       regionName: reg
+    //     })
+    //   },
+    // })
 
     var temp = getReportDate()
 
@@ -147,6 +195,9 @@ Page({
     })
   },
   wxAuth: function (e) {
+    wx.showLoading({
+      title: '请稍候...',
+    })
     var that = this
     console.log(this.subscription);
     if (this.subscription != true)
@@ -177,13 +228,26 @@ Page({
                   success: function (info) {
                     app.globalData.sessionId = info.data.data.sessionid
                     that.getPlayerInfo()
+                    wx.hideLoading()
                   },
                   fail: function (e) {
+                    wx.hideLoading()
+                    wx.showModal({
+                      title: '错误',
+                      content: '网路超时，请重新尝试',
+                      showCancel: false,
+                    })
                     console.log(e);
                   }
                 })
               },
               fail: function (data) {
+                wx.hideLoading()
+                wx.showModal({
+                  title: '错误',
+                  content: '微信授权失败',
+                  showCancel: false,
+                })
                 console.log(data);
               }
 
@@ -193,12 +257,14 @@ Page({
       }
       else
       {
+        wx.hideLoading()
         this.getPlayerInfo()
       }
     }
     this.setData({
     auth: true
     })
+    wx.hideLoading()
   },
   getPlayerInfo: function () {
     var that = this
@@ -219,21 +285,38 @@ Page({
             method: 'GET',
             success: function (info) {
               app.globalData.dataGlobal = util.parseFields(info.data)
+              that.setData({
+                auth: true,
+                subscription: true,
+              })
             },
             fail: function (e) {
               console.log(e);
             }
           })
+          var nickName = info.data.data.Name + '#' + info.data.data.BattleTag
+          var region = info.data.data.BattleNetRegionId
+          that.setData({
+            subscription: true,
+            nickName: nickName,
+            regionName: that.getRegionName(region),
+          })
           wx.setStorage({
             key: 'nickName',
-            data: info.data.data.Name + '#' + info.data.data.BattleTag,
+            data: nickName,
           })
           wx.setStorage({
             key: 'region',
-            data: info.data.data.BattleNetRegionId,
+            data: region,
           })
 
-          that.onLoad()
+          // that.onLoad()
+        } else {
+          that.setData({
+            auth: true,
+            subscription: false,
+          })
+          console.log(info)
         }
       },
       fail: function (e) { }
@@ -267,24 +350,7 @@ Page({
           } else {
             if (info.data.result == 'Success') {
               that.getPlayerInfo()
-              var reg
-              switch (info.data.data.region) {
-                case 1:
-                  reg = '(美服)'
-                  break;
-                case 2:
-                  reg = '(欧服)'
-                  break;
-                case 3:
-                  reg = '(亚服)'
-                  break;
-                case 5:
-                  reg = ''
-                  break;
-                default:
-                  reg = '(未知)'
-                  break;
-              }
+              var reg = that.getRegionName(info.data.data.region)
               that.setData({
                 nickName: info.data.data.name,
                 regionName: reg,
@@ -322,6 +388,27 @@ Page({
         icon: 'none'
       })
     }
+  },
+  getRegionName: function (regionID) {
+    var reg
+    switch (regionID) {
+      case 1:
+        reg = '(美服)'
+        break;
+      case 2:
+        reg = '(欧服)'
+        break;
+      case 3:
+        reg = '(亚服)'
+        break;
+      case 5:
+        reg = ''
+        break;
+      default:
+        reg = '(未知)'
+        break;
+    }
+    return reg
   },
   cancel: function(e) {
     var that = this
