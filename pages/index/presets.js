@@ -1871,8 +1871,8 @@ var events = {
       var HeroInf = getHeroInf(HeroID)
       var limit = WinRate > 60 && Games >= 10
       return limit ? [
-        "You have played Hero " + HeroInf.name_en + " for" + Games + "times, with " + WinRate + "% winning rate.",
-        "你使用了英雄 " + HeroInf.name_cn + " 上场了 " + Games + "次，胜率达到了" + WinRate + "%",
+        "You have played Hero " + HeroInf.name_en + " for " + Games + " times, with " + WinRate + "% winning rate.",
+        "你使用了英雄 " + HeroInf.name_cn + " 上场了 " + Games + " 次，胜率达到了" + WinRate + "%",
       ] : false
     }
   ],
