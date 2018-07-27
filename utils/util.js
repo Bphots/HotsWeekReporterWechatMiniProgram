@@ -15,7 +15,7 @@ const formatNumber = n => {
 }
 
 //映射转换
-var parseFields = function (data) {
+var parseFields = function(data) {
   var parsedObj = {}
   for (var i in data) {
     if (i === 'PlayerBase' || i === 'PlayerRankings') {
@@ -30,11 +30,10 @@ var parseFields = function (data) {
       parsedObj[i]['_sumMax'] = _sumMax
     }
   }
-  console.log(parsedObj)
   return parsedObj
 }
-var matchPresets = function (_data,) {
-var  app = getApp()
+var matchPresets = function(_data, ) {
+  var app = getApp()
   var presets = app.globalData.presets
   var _parsedObj = {}
   for (var i in presets) {
@@ -44,8 +43,8 @@ var  app = getApp()
   }
   return _parsedObj
 }
-var findMax = function (_sumMax, index, _data) {
- var app = getApp()
+var findMax = function(_sumMax, index, _data) {
+  var app = getApp()
   var presets = app.globalData.presets
   for (var i in presets) {
     var field = presets[i]
@@ -55,8 +54,54 @@ var findMax = function (_sumMax, index, _data) {
   }
   return _sumMax
 }
+//获取使用地区ID换取地区名称
+function getRegionName(regionID) {
+  var reg
+  switch (regionID) {
+    case 1:
+      reg = '(美服)'
+      break;
+    case 2:
+      reg = '(欧服)'
+      break;
+    case 3:
+      reg = '(亚服)'
+      break;
+    case 5:
+      reg = ''
+      break;
+    default:
+      reg = '(未知)'
+      break;
+  }
+  return reg
+}
+//通过用户ID获取本地存储的用户信息
+function getLocalPlayerInfo(playerId){
+  var app = getApp()
+  for (var i in app.globalData.playersInfo) {
+    var playInfo = app.globalData.playersInfo[i]
+    if (playInfo.PlayerId == playerId) {
+      return playInfo
+    }
+  }
+}   
+//删除指定id记录
+function deletePlayers(playerId){
+  var app = getApp();
+  for (var i in app.globalData.playersInfo) {
+    var playInfo = app.globalData.playersInfo[i]
+    if (playInfo.PlayerId == playerId) {
+      app.globalData.playersInfo.splice(i, 1)
+      break
+    }
+  }
+}
 
 module.exports = {
   formatTime: formatTime,
-  parseFields: parseFields
+  parseFields: parseFields,
+  getRegionName: getRegionName,
+  getLocalPlayerInfo: getLocalPlayerInfo,
+  deletePlayers: deletePlayers
 }

@@ -146,3 +146,8 @@
   color: #990000;
   border-color: #990000;
 }
+
+.grayLineStyle {
+  background: #ddd;
+  height: 0.5rpx;
+}

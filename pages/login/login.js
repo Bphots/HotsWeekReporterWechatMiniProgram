@@ -1,7 +1,7 @@
 // pages/login/login.js
 const app = getApp()
 const util = require('../../utils/util.js')
-
+const config = require('../../config.js')
 Page({
 
   /**
@@ -17,7 +17,7 @@ Page({
     //服务器地区
     regionName: '',
     //订阅
-    subscription: null,
+    subscription: false,
     //周报按钮
     firstTime: null,
     // 开放周报
@@ -44,7 +44,7 @@ Page({
               // 发送 res.code 到后台换取 openId, sessionKey, unionId
               var code = res.code; //获取code
               wx.getUserInfo({ //得到rawData, signatrue, encryptData
-                success: function (data) {
+                success: function(data) {
                   var rawData = data.rawData;
                   var signature = data.signature;
                   var encryptedData = data.encryptedData;
@@ -59,16 +59,16 @@ Page({
                       'encryptedData': encryptedData
                     },
                     method: 'GET',
-                    success: function (info) {
+                    success: function(info) {
                       app.globalData.sessionId = info.data.data.sessionid
                       that.getPlayerInfo()
                     },
-                    fail: function (e) {
+                    fail: function(e) {
                       console.log(e);
                     }
                   })
                 },
-                fail: function (data) {
+                fail: function(data) {
                   console.log(data);
                 }
 
@@ -86,46 +86,6 @@ Page({
       }
     })
 
-    // wx.getStorage({
-    //   key: 'nickName',
-    //   success: function(res) {
-    //     if (res.data) {
-    //       that.setData({
-    //         nickName: res.data,
-    //         subscription: true
-    //       })
-    //     }
-    //   },
-    // })
-    // wx.getStorage({
-    //   key: 'region',
-    //   success: function(res) {
-    //     var reg
-    //     switch (res.data) {
-    //       case 1:
-    //         reg = '(美服)'
-    //         break;
-    //       case 2:
-    //         reg = '(欧服)'
-    //         break;
-    //       case 3:
-    //         reg = '(亚服)'
-    //         break;
-    //       case 5:
-    //         reg = ''
-    //         break;
-    //       default:
-    //         reg = '(未知)'
-    //         break;
-    //     }
-    //     that.data.regionName = reg
-    //     console.log(reg)
-    //     that.setData({
-    //       regionName: reg
-    //     })
-    //   },
-    // })
-
     var temp = getReportDate()
 
     if (!temp) {
@@ -140,83 +100,60 @@ Page({
       })
     }
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function() {
-
+  onShow: function(e) {
+    var that = this
+    //重复打开时显示主页角色
+    wx.getStorage({
+      key: 'playerId',
+      success: function(res) {
+        if (app.globalData.playerInfo != null) {
+          var nickName = app.globalData.playerInfo.Name + '#' + app.globalData.playerInfo.BattleTag
+          var region = app.globalData.playerInfo.BattleNetRegionId
+          that.setData({
+            nickName: nickName,
+            regionName: util.getRegionName(region),
+          })
+        } else {
+          that.setData({
+            subscription: false
+          })
+        }
+      },
+      fail: function(res) {
+        that.setData({
+          subscription: false
+        })
+      }
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function() {
-
-  },
+  //服务器选择
   bindRegionChange: function(e) {
     this.setData({
       regionIndex: e.detail.value
     })
   },
-  wxAuth: function (e) {
+  //微信授权
+  wxAuth: function(e) {
     wx.showLoading({
       title: '请稍候...',
     })
     var that = this
-    console.log(this.subscription);
-    if (this.subscription != true)
-    {
-      console.log(app.globalData.sessionId);
+    if (this.subscription != true) {
       if (app.globalData.sessionId == null) {
-        console.log('login');
+        console.log('wxAuth');
         wx.login({
           success: res => {
             // 发送 res.code 到后台换取 openId, sessionKey, unionId
             var code = res.code; //获取code
             wx.getUserInfo({ //得到rawData, signatrue, encryptData
-              success: function (data) {
+              success: function(data) {
                 var rawData = data.rawData;
                 var signature = data.signature;
                 var encryptedData = data.encryptedData;
                 var iv = data.iv;
+                //用户登录
                 wx.request({
-                  url: 'https://www.bphots.com/wxmini/api/login',
+                  url: config.service.login,
                   data: {
                     "code": code,
                     "rawData": rawData,
@@ -225,12 +162,15 @@ Page({
                     'encryptedData': encryptedData
                   },
                   method: 'GET',
-                  success: function (info) {
+                  success: function(info) {
                     app.globalData.sessionId = info.data.data.sessionid
+                    that.setData({
+                      auth: true,
+                    })
                     that.getPlayerInfo()
                     wx.hideLoading()
                   },
-                  fail: function (e) {
+                  fail: function(e) {
                     wx.hideLoading()
                     wx.showModal({
                       title: '错误',
@@ -241,7 +181,7 @@ Page({
                   }
                 })
               },
-              fail: function (data) {
+              fail: function(data) {
                 wx.hideLoading()
                 wx.showModal({
                   title: '错误',
@@ -250,67 +190,77 @@ Page({
                 })
                 console.log(data);
               }
-
             })
           }
         })
-      }
-      else
-      {
+      } else {
         wx.hideLoading()
+        that.setData({
+          auth: true,
+        })
         this.getPlayerInfo()
       }
     }
     this.setData({
-    auth: true
+      auth: true
     })
     wx.hideLoading()
   },
-  getPlayerInfo: function () {
+  getPlayerInfo: function() {
     var that = this
-    console.log(app.globalData.sessionId)
+    //获取已绑定用户信息
     wx.request({
-      url: 'https://www.bphots.com/wxmini/api/reporter/info',
+      url: config.service.reportUrl,
       header: {
         'sessionid': app.globalData.sessionId
       },
       method: 'GET',
-      success: function (info) {
+      success: function(info) {
         if (info.data.data != null) {
-          console.log(info.data.data)
-          app.globalData.playerId = info.data.data.PlayerId
-          app.globalData.lastWeekNumber = info.data.data.LastWeekNumber
-          wx.request({
-            url: 'https://www.bphots.com/week/api/report/global/' + app.globalData.lastWeekNumber,
-            method: 'GET',
-            success: function (info) {
-              app.globalData.dataGlobal = util.parseFields(info.data)
-              that.setData({
-                auth: true,
-                subscription: true,
-              })
-            },
-            fail: function (e) {
-              console.log(e);
-            }
-          })
-          var nickName = info.data.data.Name + '#' + info.data.data.BattleTag
-          var region = info.data.data.BattleNetRegionId
           that.setData({
-            subscription: true,
-            nickName: nickName,
-            regionName: that.getRegionName(region),
+            auth: true,
           })
-          wx.setStorage({
-            key: 'nickName',
-            data: nickName,
-          })
-          wx.setStorage({
-            key: 'region',
-            data: region,
-          })
+          app.globalData.playersInfo = info.data.data
+          if (info.data.data != null && info.data.data.length > 0) {
+            that.setData({
+              subscription: true,
+              auth: true,
+            })
+            //查询持久化保存的PlayerId
+            wx.getStorage({
+              key: 'playerId',
+              success: function(res) {
+                for (var i in info.data.data) {
+                  var playInfo = info.data.data[i]
+                  if (playInfo.PlayerId == res.data) {
+                    app.globalData.playerInfo = playInfo
+                    break
+                  }
+                }
+                //如果没有记录则将第一个当做默认角色，并保存PlayerId
+                if (app.globalData.playerInfo == null) {
+                  app.globalData.playerInfo = info.data.data[0]
+                  wx.setStorage({
+                    key: 'playerId',
+                    data: app.globalData.playerInfo.PlayerId,
+                  })
+                }
+                that.setPlayerInfo()
+              },
+              fail: function(res) {
+                // 无playerId
+                app.globalData.playerInfo = info.data.data[0]
+                wx.setStorage({
+                  key: 'playerId',
+                  data: app.globalData.playerInfo.PlayerId,
+                })
+                that.setPlayerInfo()
+              }
+            })
+          } else {
 
-          // that.onLoad()
+          }
+
         } else {
           that.setData({
             auth: true,
@@ -319,7 +269,7 @@ Page({
           console.log(info)
         }
       },
-      fail: function (e) { }
+      fail: function(e) {}
     })
   },
   formSubmit: function(e) {
@@ -330,7 +280,7 @@ Page({
     if (e.detail.value.name != "") {
       console.log('订阅')
       wx.request({
-        url: 'https://www.bphots.com/wxmini/api/reporter/subscribe',
+        url: config.service.subscribe,
         data: {
           "name": e.detail.value.name,
           'region': this.data.regionId[this.data.regionIndex],
@@ -350,20 +300,11 @@ Page({
           } else {
             if (info.data.result == 'Success') {
               that.getPlayerInfo()
-              var reg = that.getRegionName(info.data.data.region)
+              var reg = util.getRegionName(info.data.data.region)
               that.setData({
                 nickName: info.data.data.name,
                 regionName: reg,
                 subscription: true
-              })
-
-              wx.setStorage({
-                key: 'nickName',
-                data: info.data.data.name,
-              })
-              wx.setStorage({
-                key: 'region',
-                data: info.data.data.region,
               })
 
               wx.showToast({
@@ -389,34 +330,15 @@ Page({
       })
     }
   },
-  getRegionName: function (regionID) {
-    var reg
-    switch (regionID) {
-      case 1:
-        reg = '(美服)'
-        break;
-      case 2:
-        reg = '(欧服)'
-        break;
-      case 3:
-        reg = '(亚服)'
-        break;
-      case 5:
-        reg = ''
-        break;
-      default:
-        reg = '(未知)'
-        break;
-    }
-    return reg
-  },
   cancel: function(e) {
     var that = this
     console.log('取消订阅')
     wx.request({
-      url: 'https://www.bphots.com/wxmini/api/reporter/subscribe',
+      url: config.service.subscribe,
       data: {
-        "name": ''
+        "name": app.globalData.playerInfo.Name + '#' + app.globalData.playerInfo.BattleTag,
+        'region': app.globalData.playerInfo.BattleNetRegionId,
+        'cancel': 1
       },
       header: {
         'sessionid': app.globalData.sessionId
@@ -432,23 +354,34 @@ Page({
           })
         } else {
           if (info.data.result == 'Success') {
-            that.setData({
-              nickName: '',
-              regionName: '',
-              subscription: false
-            })
             wx.showToast({
               title: '取消成功',
               icon: 'none'
             })
-            wx.removeStorage({
-              key: 'nickName',
-              success: function(res) {},
-            })
-            wx.removeStorage({
-              key: 'region',
-              success: function(res) {},
-            })
+            //移除取消订阅角色            
+            for (var i in app.globalData.playersInfo) {
+              var playInfo = app.globalData.playersInfo[i]
+              if (playInfo.PlayerId == app.globalData.playerInfo.PlayerId) {
+                app.globalData.playersInfo.splice(i, 1)
+                break
+              }
+            }
+            if (app.globalData.playersInfo != null && app.globalData.playersInfo.length > 0) {
+              //还有其他订阅角色
+              app.globalData.playerInfo = info.data.data[0]
+              wx.setStorage({
+                key: 'playerId',
+                data: app.globalData.playerInfo.PlayerId,
+              })
+              that.setPlayerInfo()
+            } else {
+              //无订阅角色
+              that.setData({
+                nickName: '',
+                regionName: '',
+                subscription: false
+              })
+            }
           } else {
             wx.showToast({
               title: info.data.msg,
@@ -469,6 +402,33 @@ Page({
         url: '../index/index',
       })
     }
+  },
+  //设置页面数据
+  setPlayerInfo: function() {
+    console.log(app.globalData.playerInfo)
+    var that = this
+    var nickName = app.globalData.playerInfo.Name + '#' + app.globalData.playerInfo.BattleTag
+    var region = app.globalData.playerInfo.BattleNetRegionId
+    this.setData({
+      subscription: true,
+      nickName: nickName,
+      regionName: util.getRegionName(region),
+    })
+
+    //查询全球数据
+    wx.request({
+      url: config.service.globalUrl + app.globalData.playerInfo.LastWeekNumber,
+      method: 'GET',
+      success: function(info) {
+        app.globalData.dataGlobal = util.parseFields(info.data)
+        that.setData({
+          auth: true,
+        })
+      },
+      fail: function(e) {
+        console.log(e);
+      }
+    })
   }
 })
 

@@ -3,6 +3,9 @@
   <form style='width:100%;' bindsubmit="formSubmit" bindreset="formReset">
     <!-- <button open-type='getUserInfo'>获取授权</button> -->
     <view class='container'>
+      <navigator wx:if="{{subscription === true && auth === true}}" url="../subscribe/subscribe"  style='align-self:flex-start'>
+        <view class='text-wheat' style='font-size: 28rpx;padding:20rpx 20rpx 20rpx 20rpx;'>管理订阅</view>
+      </navigator>
       <image src='../../image/logo.png' class='logo' />
       <view class='title text-wheat'>背锅周报</view>
       <!-- 鉴权中 -->
@@ -35,6 +38,7 @@
         </view>
         <button bindtap='week' class='btn btn-wheat' hover-class='btn-wheat-hover'>{{firstTime}}</button>
         <view bindtap='cancel' class='text-wheat' style='font-size: 28rpx'>取消订阅</view>
+
       </block>
     </view>
   </form>

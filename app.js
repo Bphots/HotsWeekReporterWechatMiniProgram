@@ -3,21 +3,19 @@
 App({
   onLaunch: function() {
     var that = this;
-    // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
     getPresets(that)
     getHeroInfo(that)
   },
   globalData: {
-    userInfo: null,
     sessionId: null,
+    // 已订阅的角色
+    playersInfo: null,
+    //当前显示的用户
+    playerInfo:null,    
     //用户ID
-    playerId: null,
+    // playerId: null,
     //周ID
-    lastWeekNumber: null,
+    // lastWeekNumber: null,
     //映射数据
     presets: null,
     //英雄数据
@@ -35,7 +33,7 @@ App({
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         var code = res.code; //获取code
         wx.getUserInfo({ //得到rawData, signatrue, encryptData
-          success: function (data) {
+          success: function(data) {
             var rawData = data.rawData;
             var signature = data.signature;
             var encryptedData = data.encryptedData;
@@ -50,7 +48,7 @@ App({
                 'encryptedData': encryptedData
               },
               method: 'GET',
-              success: function (info) {
+              success: function(info) {
                 that.globalData.sessionId = info.data.data.sessionid
                 console.log(that.globalData.sessionId)
                 // that.getPlayerInfo(); // 这个方法调用接口获取玩家名，无需传参
@@ -60,12 +58,12 @@ App({
                 console.log(123)
 
               },
-              fail: function (e) {
+              fail: function(e) {
                 console.log(e);
               }
             })
           },
-          fail: function (data) {
+          fail: function(data) {
             console.log(data);
           }
 

@@ -1,12 +1,13 @@
 {
   "pages": [
     "pages/login/login",
-    "pages/index/index"
+    "pages/index/index",
+    "pages/subscribe/subscribe"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
+    "navigationBarTitleText": "风暴背锅助手",
     "navigationBarTextStyle": "black"
   }
 }

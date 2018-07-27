@@ -52,7 +52,7 @@ Page({
       title: '请稍候...',
     })
     wx.request({
-      url: 'https://www.bphots.com/week/api/medaldraw/' + app.globalData.playerId,
+      url: 'https://www.bphots.com/week/api/medaldraw/' + app.globalData.playerInfo.PlayerId,
       header: {
         'sessionid': app.globalData.sessionId
       },
@@ -143,7 +143,7 @@ Page({
     // 获取组件
     var that = this;
     wx.request({
-      url: 'https://www.bphots.com/week/api/report/personal/' + app.globalData.lastWeekNumber + '/' + app.globalData.playerId,
+      url: 'https://www.bphots.com/week/api/report/personal/' + app.globalData.playerInfo.LastWeekNumber + '/' + app.globalData.playerInfo.PlayerId,
       // url: 'https://www.bphots.com/week/api/report/personal/2533/681',
       header: {
         'sessionid': app.globalData.sessionId
@@ -212,14 +212,8 @@ Page({
     wx.showLoading({
       title: '请稍候...',
     })
-    wx.getStorage({
-      key: 'nickName',
-      success: function(res) {
-        that.setData({
-          nickName: res.data,
-          subscription: true
-        })
-      },
+    that.setData({
+      nickName: app.globalData.playerInfo.Name + "#" + app.globalData.playerInfo.BattleTag,
     })
   },
   // 点击按钮后初始化图表
