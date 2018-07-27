@@ -48,7 +48,58 @@ Page({
     this.showToastDeveloping()
   },
   medalDraw: function() {
-    this.showToastDeveloping()
+    wx.showLoading({
+      title: '请稍候...',
+    })
+    wx.request({
+      url: 'https://www.bphots.com/week/api/medaldraw/' + app.globalData.playerId,
+      header: {
+        'sessionid': app.globalData.sessionId
+      },
+      data: {
+        'lang': 'zh-cn'
+      },
+      method: 'GET',
+      success: function(res) {
+        var medalId = res.data.data.medal_id
+        var medalName = res.data.data.medal_name
+        var medalDesc = res.data.data.medal_desc
+        var userExist = res.data.data.user_exist
+        wx.hideLoading()
+        if (medalId !== null) {
+          wx.showModal({
+            title: '恭喜',
+            content: '你获得了 [' + medalName + '] 一枚！',
+            showCancel: false,
+            success: function(res) {
+              if (!userExist) {
+                wx.showModal({
+                  title: '请注意',
+                  content: '请在背锅助手官网 www.bphots.com 进行一次登录，避免战网改名导致勋章丢失',
+                  showCancel: false,
+                  success: function(res) {}
+                })
+              }
+            }
+          })
+        } else {
+          wx.showModal({
+            title: '再接再厉',
+            content: '很遗憾，你这次没有抽中，下次中奖概率已提高',
+            showCancel: false,
+            success: function(res) {}
+          })
+        }
+      },
+      fail: function(e) {
+        wx.showModal({
+          title: '网络错误',
+          content: '请稍后重试',
+          showCancel: false,
+          success: function(res) {}
+        })
+      }
+    })
   },
   numberFormat: function(number, decimals, dec_point, thousands_sep) {
     /*
@@ -98,7 +149,7 @@ Page({
             title: '抱歉',
             content: '我们没有你本周的对战记录TwT',
             showCancel: false,
-            success: function (res) {
+            success: function(res) {
               wx.navigateBack({
                 delta: -1
               });
@@ -201,38 +252,38 @@ Page({
       radar: {
         // shape: 'circle',
         indicator: [{
-          name: 'KDA',
-          max: 100
-        },
-        {
-          name: '击杀',
-          max: 100
-        },
-        {
-          name: '生存',
-          max: 100
-        },
-        {
-          name: '雇佣兵',
-          max: 100
-        },
-        {
-          name: '经验',
-          max: 100
-        }
+            name: 'KDA',
+            max: 100
+          },
+          {
+            name: '击杀',
+            max: 100
+          },
+          {
+            name: '生存',
+            max: 100
+          },
+          {
+            name: '雇佣兵',
+            max: 100
+          },
+          {
+            name: '经验',
+            max: 100
+          }
         ]
       },
       series: [{
         name: '个人 vs 全球',
         type: 'radar',
         data: [{
-          value: this.data.radarData,
-          name: '个人'
-        },
-        {
-          value: [60, 60, 60, 60, 60, 60],
-          name: '全球'
-        }
+            value: this.data.radarData,
+            name: '个人'
+          },
+          {
+            value: [60, 60, 60, 60, 60, 60],
+            name: '全球'
+          }
         ]
       }]
     };
