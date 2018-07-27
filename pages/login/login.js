@@ -464,6 +464,7 @@ Page({
   },
   week: function() {
     if (this.data.open) {
+      wx.showLoading()
       wx.navigateTo({
         url: '../index/index',
       })
