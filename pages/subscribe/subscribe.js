@@ -119,12 +119,13 @@ Page({
             })
           } else {
             if (info.data.result == 'Success') {
-              that.hideModal();
-              that.getPlayerInfo()
               wx.showToast({
                 title: '订阅成功',
                 icon: 'none'
               })
+              that.hideModal();
+              that.getPlayerInfo()
+            
             } else {
               wx.showToast({
                 title: info.data.msg,

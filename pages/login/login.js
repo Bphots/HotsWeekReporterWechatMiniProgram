@@ -22,6 +22,11 @@ Page({
     firstTime: null,
     // 开放周报
     open: false,
+    //切换所用的角色信息
+    players: [],
+    playersIndex: 0,
+    //选择的角色
+    player: null,
     auth: null
   },
 
@@ -102,11 +107,21 @@ Page({
   },
   onShow: function(e) {
     var that = this
+    this.setLocalPlayerChange()
     //重复打开时显示主页角色
     wx.getStorage({
       key: 'playerId',
       success: function(res) {
         if (app.globalData.playerInfo != null) {
+          for (var i in app.globalData.playersInfo) {
+            var p = app.globalData.playersInfo[i]
+            if (p.PlayerId == app.globalData.playerInfo.PlayerId) {
+              that.setData({
+                playersIndex : i
+              })  
+              break            
+            }
+          }
           var nickName = app.globalData.playerInfo.Name + '#' + app.globalData.playerInfo.BattleTag
           var region = app.globalData.playerInfo.BattleNetRegionId
           that.setData({
@@ -126,10 +141,34 @@ Page({
       }
     })
   },
+  //主页角色切换
+  setLocalPlayerChange: function() {
+    var p = []
+    if (app.globalData.playersInfo != null && app.globalData.playersInfo.length > 0) {
+      for (var i in app.globalData.playersInfo) {
+        p.push(app.globalData.playersInfo[i].Name + "#" + app.globalData.playersInfo[i].BattleTag)
+      }
+    }
+    this.setData({
+      players: p
+    })
+  },
   //服务器选择
   bindRegionChange: function(e) {
     this.setData({
       regionIndex: e.detail.value
+    })
+  },
+  //角色切换
+  bindPlayerChange: function(e) {
+    this.setData({
+      playersIndex: e.detail.value
+    })
+    app.globalData.playerInfo = app.globalData.playersInfo[e.detail.value]
+    wx.setStorageSync("playerId", app.globalData.playerInfo.PlayerId)
+    this.setData({
+      nickName: app.globalData.playerInfo.Name + '#' + app.globalData.playerInfo.BattleTag,
+      regionName: util.getRegionName(app.globalData.playerInfo.BattleNetRegionId)
     })
   },
   //微信授权
@@ -221,6 +260,7 @@ Page({
             auth: true,
           })
           app.globalData.playersInfo = info.data.data
+          that.setLocalPlayerChange()
           if (info.data.data != null && info.data.data.length > 0) {
             that.setData({
               subscription: true,
@@ -414,7 +454,15 @@ Page({
       nickName: nickName,
       regionName: util.getRegionName(region),
     })
-
+    for (var i in app.globalData.playersInfo) {
+      var p = app.globalData.playersInfo[i]
+      if (p.PlayerId == app.globalData.playerInfo.PlayerId) {
+        this.setData({
+          playersIndex: i
+        })
+        break
+      }
+    }
     //查询全球数据
     wx.request({
       url: config.service.globalUrl + app.globalData.playerInfo.LastWeekNumber,

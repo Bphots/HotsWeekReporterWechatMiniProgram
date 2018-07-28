@@ -33,9 +33,15 @@
       </block>
       <!-- 已订阅 -->
       <block wx:if="{{subscription === true && auth === true}}">
-        <view class='desc text-wheat' style='font-size: 34rpx'>
-          {{nickName}}{{regionName}}
-        </view>
+        <picker bindchange="bindPlayerChange" value="{{playersIndex}}" range="{{players}}" class='pickerStyle regionPicker'>
+            <view class='text-wheat regionPickerView'>
+              <span>  {{nickName}}{{regionName}}</span>
+              <image class='pickerArrow' src='/image/spinner_down.png' />
+            </view>
+          </picker>
+        <!-- <view class='desc text-wheat' style='font-size: 34rpx'>
+          {{nickName}}{{regionName}}  <image class='pickerArrow' src='/image/spinner_down.png' />
+        </view> -->
         <button bindtap='week' class='btn btn-wheat' hover-class='btn-wheat-hover'>{{firstTime}}</button>
         <view bindtap='cancel' class='text-wheat' style='font-size: 28rpx'>取消订阅</view>
 
