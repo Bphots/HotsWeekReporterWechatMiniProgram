@@ -408,7 +408,7 @@ Page({
             }
             if (app.globalData.playersInfo != null && app.globalData.playersInfo.length > 0) {
               //还有其他订阅角色
-              app.globalData.playerInfo = info.data.data[0]
+              app.globalData.playerInfo = app.globalData.playersInfo[0]
               wx.setStorage({
                 key: 'playerId',
                 data: app.globalData.playerInfo.PlayerId,
