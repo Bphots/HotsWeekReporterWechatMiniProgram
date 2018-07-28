@@ -97,7 +97,7 @@ Page({
     wx.showLoading({
       title: '请稍候...',
     })
-    if (name != "") {
+    if (name != null && name != '') {
       console.log('订阅')
       wx.request({
         url: config.service.subscribe,
@@ -125,7 +125,7 @@ Page({
               })
               that.hideModal();
               that.getPlayerInfo()
-            
+
             } else {
               wx.showToast({
                 title: info.data.msg,
@@ -213,7 +213,7 @@ Page({
       fail: function(e) {
         wx.hideLoading()
       },
-      complete:function(e){
+      complete: function(e) {
         wx.hideLoading()
       }
     })
