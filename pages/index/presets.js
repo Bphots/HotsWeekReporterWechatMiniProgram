@@ -68,14 +68,14 @@ var counter = {
       [
         ["Most Used", HeroInf.name_en],
         [HeroInf.name_en + " Plays", HeroInf.Play + " times"],
-        [HeroInf.name_en + " Length", HeroInf.Time + " mins"],
+        [HeroInf.name_en + " Length", HeroInf.Length + " mins"],
         [HeroInf.name_en + " Win", HeroInf.Win + " times"],
         [HeroInf.name_en + " Winrate", HeroInf.WinRate + "%"],
       ],
       [
         ["最常使用", HeroInf.name_cn],
         [HeroInf.name_cn + "场次", HeroInf.Play + " 次"],
-        [HeroInf.name_cn + "时长", HeroInf.Time + " 分钟"],
+        [HeroInf.name_cn + "时长", HeroInf.Length + " 分钟"],
         [HeroInf.name_cn + "获胜", HeroInf.Win + " 次"],
         [HeroInf.name_cn + "胜率", HeroInf.WinRate + "%"],
       ],
@@ -89,14 +89,14 @@ var counter = {
       [
         ["Most Used", HeroInf.name_en],
         [HeroInf.name_en + " Plays", HeroInf.GlobalPlay + " times"],
-        [HeroInf.name_en + " Length", HeroInf.GlobalTime + " mins"],
+        [HeroInf.name_en + " Length", HeroInf.GlobalLength + " mins"],
         [HeroInf.name_en + " Win", HeroInf.GlobalWin + " times"],
         [HeroInf.name_en + " Winrate", HeroInf.GlobalWinRate + "%"],
       ],
       [
         ["全球最常使用", HeroInf.name_cn],
         [HeroInf.name_cn + "场次", HeroInf.GlobalPlay + " 次"],
-        [HeroInf.name_cn + "时长", HeroInf.GlobalTime + " 分钟"],
+        [HeroInf.name_cn + "时长", HeroInf.GlobalLength + " 分钟"],
         [HeroInf.name_cn + "获胜", HeroInf.GlobalWin + " 次"],
         [HeroInf.name_cn + "胜率", HeroInf.GlobalWinRate + "%"],
       ],
@@ -1406,7 +1406,7 @@ var counter = {
     for (var hero in dataGlobal.PlayerHeroes) {
       if (dataGlobal.PlayerHeroes[hero].game_total_HeroLeague.sum > 0) {
         var Rate = (dataGlobal.PlayerHeroes[hero].game_win_HeroLeague.sum / dataGlobal.PlayerHeroes[hero].game_total_HeroLeague.sum * 100).toFixed(2)
-        if (Rate > WinRate && dataGlobal.PlayerHeroes[hero].game_total_UnrankedDraft.sum > 5) {
+        if (Rate > WinRate && dataGlobal.PlayerHeroes[hero].game_total_HeroLeague.sum > 5) {
           WinRate = Rate
           HeroID = parseInt(hero)
         }
@@ -1431,7 +1431,7 @@ var counter = {
     for (var hero in dataGlobal.PlayerHeroes) {
       if (dataGlobal.PlayerHeroes[hero].game_total_TeamLeague.sum > 0) {
         var Rate = (dataGlobal.PlayerHeroes[hero].game_win_TeamLeague.sum / dataGlobal.PlayerHeroes[hero].game_total_TeamLeague.sum * 100).toFixed(2)
-        if (Rate > WinRate && dataGlobal.PlayerHeroes[hero].game_total_UnrankedDraft.sum > 5) {
+        if (Rate > WinRate && dataGlobal.PlayerHeroes[hero].game_total_TeamLeague.sum > 5) {
           WinRate = Rate
           HeroID = parseInt(hero)
         }
@@ -1456,7 +1456,7 @@ var counter = {
     for (var hero in dataGlobal.PlayerHeroes) {
       if (dataGlobal.PlayerHeroes[hero].game_total_QuickMatch.sum > 0) {
         var Rate = (dataGlobal.PlayerHeroes[hero].game_win_QuickMatch.sum / dataGlobal.PlayerHeroes[hero].game_total_QuickMatch.sum * 100).toFixed(2)
-        if (Rate > WinRate && dataGlobal.PlayerHeroes[hero].game_total_UnrankedDraft.sum > 5) {
+        if (Rate > WinRate && dataGlobal.PlayerHeroes[hero].game_total_QuickMatch.sum > 5) {
           WinRate = Rate
           HeroID = parseInt(hero)
         }
