@@ -4,8 +4,8 @@
   <view wx:for="{{players}}" wx:key='{{item.PlayerId}}' style='width:100%;  display: flex; flex-direction: column;'>
     <view style='width:100%;  display: flex; flex-direction: row;align-items:center '>
       <view class='text-wheat' style='font-size: 34rpx;padding:20rpx 20rpx 20rpx 20rpx;flex-grow:1'>{{item.Name}}#{{item.BattleTag}}{{item.regionName}}</view>
-      <view wx:if='{{!item.isMain}}' bindtap='setMain' data-playerid="{{item.PlayerId}}" class='text-wheat' style='font-size: 28rpx;padding:20rpx 20rpx 20rpx 20rpx;'>设置为主页角色</view>
-      <view wx:if='{{item.isMain}}' class='text-wheat' style='font-size: 28rpx;padding:20rpx 20rpx 20rpx 20rpx;'>首页角色</view>
+      <view wx:if='{{!item.isMain}}' bindtap='setMain' data-playerid="{{item.PlayerId}}" class='text-wheat' style='font-size: 28rpx;padding:20rpx 20rpx 20rpx 20rpx;'>设置为默认</view>
+      <view wx:if='{{item.isMain}}' class='text-wheat' style='font-size: 28rpx;padding:20rpx 20rpx 20rpx 20rpx;'>默认</view>
       <view bindtap='cancelSubscribe' data-playerid="{{item.PlayerId}}" class='text-wheat' style='font-size: 28rpx;padding:20rpx 20rpx 20rpx 20rpx;'>取消订阅</view>
     </view>
     <view class='grayLineStyle' />
@@ -21,7 +21,7 @@
       </view>
       <picker bindchange="bindRegionChange" value="{{regionIndex}}" range="{{region}}" class='pickerStyle regionPicker'>
         <view class='text-wheat regionPickerView'>
-          <span style='color:#333'>选择地区：{{region[regionIndex]}}</span>
+          <span style='color:#333; margin-top: 20rpx;'>选择地区：{{region[regionIndex]}}</span>
           <image class='pickerArrow' src='/image/spinner_down.png' />
         </view>
       </picker>
