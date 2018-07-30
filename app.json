@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/login/login",
-    "pages/index/index",
+    "pages/main/main",
+    "pages/weekReport/weekReport",
     "pages/subscribe/subscribe"
   ],
   "window": {

@@ -76,8 +76,24 @@ function getRegionName(regionID) {
   }
   return reg
 }
+// 返回服务器信息
+const regionInfo = param => {
+  var region = ['国服', '美服', '亚服', '欧服']
+  var regionId = [5, 1, 3, 2]
+  if (typeof param == 'number') {
+    // 数字类型
+    return [region[index], regionId[index]]
+  } else if (typeof param == 'string') {
+    if (param == 'region') {
+      return region
+    } else if (param = 'regionId') {
+      return regionId
+    }
+  }
+}
+
 //通过用户ID获取本地存储的用户信息
-function getLocalPlayerInfo(playerId){
+function getLocalPlayerInfo(playerId) {
   var app = getApp()
   for (var i in app.globalData.playersInfo) {
     var playInfo = app.globalData.playersInfo[i]
@@ -85,9 +101,9 @@ function getLocalPlayerInfo(playerId){
       return playInfo
     }
   }
-}   
+}
 //删除指定id记录
-function deletePlayers(playerId){
+function deletePlayers(playerId) {
   var app = getApp();
   for (var i in app.globalData.playersInfo) {
     var playInfo = app.globalData.playersInfo[i]
@@ -103,5 +119,6 @@ module.exports = {
   parseFields: parseFields,
   getRegionName: getRegionName,
   getLocalPlayerInfo: getLocalPlayerInfo,
-  deletePlayers: deletePlayers
+  deletePlayers: deletePlayers,
+  regionInfo: regionInfo
 }

@@ -1,4 +1,4 @@
-/* pages/login/login.wxss */
+/* pages/main/main.wxss */
 
 .logo {
   width: 150rpx;

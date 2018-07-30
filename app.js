@@ -1,5 +1,5 @@
 //app.js
-// const util = require('utils/util.js')
+const config = require('config.js')
 App({
   onLaunch: function() {
     var that = this;
@@ -12,90 +12,18 @@ App({
     playersInfo: null,
     //当前显示的用户
     playerInfo:null,    
-    //用户ID
-    // playerId: null,
-    //周ID
-    // lastWeekNumber: null,
     //映射数据
     presets: null,
     //英雄数据
     heroes: null,
-    //用户各种数据
-    // dataPersonal: null,
     //全球数据
     dataGlobal: null,
-    auth: false
   },
-
-  login: function(that) {
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        var code = res.code; //获取code
-        wx.getUserInfo({ //得到rawData, signatrue, encryptData
-          success: function(data) {
-            var rawData = data.rawData;
-            var signature = data.signature;
-            var encryptedData = data.encryptedData;
-            var iv = data.iv;
-            wx.request({
-              url: 'https://www.bphots.com/wxmini/api/login',
-              data: {
-                "code": code,
-                "rawData": rawData,
-                "signature": signature,
-                'iv': iv,
-                'encryptedData': encryptedData
-              },
-              method: 'GET',
-              success: function(info) {
-                that.globalData.sessionId = info.data.data.sessionid
-                console.log(that.globalData.sessionId)
-                // that.getPlayerInfo(); // 这个方法调用接口获取玩家名，无需传参
-
-                // getGlobaldata(that)
-                // that.globalData.auth = true
-                console.log(123)
-
-              },
-              fail: function(e) {
-                console.log(e);
-              }
-            })
-          },
-          fail: function(data) {
-            console.log(data);
-          }
-
-        })
-      }
-    })
-  }
 })
-//获取用户信息
-// function getPlayerInfo() {
-//   console.log('getPlayerInfo3')
-//   var that = getApp();
-//   wx.request({
-//     url: 'https://www.bphots.com/wxmini/api/reporter/info',
-//     header: {
-//       'sessionid': that.globalData.sessionId
-//     },
-//     method: 'GET',
-//     success: function (info) {
-//       if (info.data.data != null) {
-//         that.globalData.playerId = info.data.data.PlayerId
-//         that.globalData.lastWeekNumber = info.data.data.LastWeekNumber
-//         getGlobaldata(that)
-//       }
-//     },
-//     fail: function (e) { }
-//   })
-// }
 //获取映射
 function getPresets(that) {
   wx.request({
-    url: 'https://www.bphots.com/week/api/report/presets',
+    url:config.service.presetsUrl,
     method: 'GET',
     success: function(info) {
       that.globalData.presets = info.data
@@ -108,7 +36,7 @@ function getPresets(that) {
 //获取英雄信息
 function getHeroInfo(that) {
   wx.request({
-    url: 'https://www.bphots.com/bp_helper/get/herolist/v2/',
+    url:config.service.heroListUrl,
     method: 'GET',
     success: function(info) {
       that.globalData.heroes = info.data
@@ -118,16 +46,3 @@ function getHeroInfo(that) {
     }
   })
 }
-//全球数据
-// function getGlobaldata(that) {
-//   wx.request({
-//     url: 'https://www.bphots.com/week/api/report/global/' + that.globalData.lastWeekNumber,
-//     method: 'GET',
-//     success: function(info) {
-//       that.globalData.dataGlobal = util.parseFields(info.data)
-//     },
-//     fail: function(e) {
-//       console.log(e);
-//     }
-//   })
-// }
