@@ -1,6 +1,6 @@
 {
   "pages": [
-    "pages/main/main",
+    "pages/login/login",
     "pages/weekReport/weekReport",
     "pages/subscribe/subscribe"
   ],

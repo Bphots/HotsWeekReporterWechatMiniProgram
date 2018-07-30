@@ -1,4 +1,4 @@
-<!--pages/main/main.wxml-->
+<!--pages/login/login.wxml-->
 <view class='container' style='align-items:center;background-color: #4a196b;height: 100%;'>
   <form style='width:100%;' bindsubmit="formSubmit" bindreset="formReset">
     <!-- <button open-type='getUserInfo'>获取授权</button> -->

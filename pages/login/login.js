@@ -1,4 +1,4 @@
-// pages/main/main.js
+// pages/login/login.js
 const app = getApp()
 const util = require('../../utils/util.js')
 const config = require('../../config.js')

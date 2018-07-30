@@ -52,10 +52,7 @@ Page({
     var playerInfo = util.getLocalPlayerInfo(e.currentTarget.dataset.playerid)
     app.globalData.playerInfo = playerInfo
     this.setPlayerInfo()
-    wx.setStorage({
-      key: 'playerId',
-      data: playerInfo.PlayerId,
-    })
+    wx.setStorageSync('playerId', playerInfo.PlayerId)
     wx.showToast({
       title: '修改成功',
       icon: 'none'
@@ -188,10 +185,7 @@ Page({
             if (app.globalData.playersInfo != null && app.globalData.playersInfo.length > 0) {
               //还有其他订阅角色
               app.globalData.playerInfo = app.globalData.playersInfo[0]
-              wx.setStorage({
-                key: 'playerId',
-                data: app.globalData.playerInfo.PlayerId,
-              })
+              wx.setStorageSync('playerId', app.globalData.playerInfo.PlayerId)
 
             } else {
               //无订阅角色
@@ -233,36 +227,17 @@ Page({
           app.globalData.playersInfo = info.data.data
           if (info.data.data != null && info.data.data.length > 0) {
             //查询持久化保存的PlayerId
-            wx.getStorage({
-              key: 'playerId',
-              success: function(res) {
-                for (var i in info.data.data) {
-                  var playInfo = info.data.data[i]
-                  if (playInfo.PlayerId == res.data) {
-                    app.globalData.playerInfo = playInfo
-                    break
-                  }
-                }
-                //如果没有记录则将第一个当做默认角色，并保存PlayerId
-                if (app.globalData.playerInfo == null) {
-                  app.globalData.playerInfo = info.data.data[0]
-                  wx.setStorage({
-                    key: 'playerId',
-                    data: app.globalData.playerInfo.PlayerId,
-                  })
-                }
-                that.setPlayerInfo()
-              },
-              fail: function(res) {
-                // 无playerId
-                app.globalData.playerInfo = info.data.data[0]
-                wx.setStorage({
-                  key: 'playerId',
-                  data: app.globalData.playerInfo.PlayerId,
-                })
-                that.setPlayerInfo()
-              }
-            })
+            var playerId = wx.getStorageSync('playerId')
+            app.globalData.playerInfo = util.getLocalPlayerInfo(playerId)
+            if (app.globalData.playerInfo == null) {
+              app.globalData.playerInfo = info.data.data[0]
+              wx.setStorageSync('playerId', app.globalData.playerInfo.PlayerId)
+            } else {
+               // 无playerId
+              app.globalData.playerInfo = info.data.data[0]
+              wx.setStorageSync('playerId', app.globalData.playerInfo.PlayerId)
+            }
+            that.setPlayerInfo()
           }
         } else {}
       },
