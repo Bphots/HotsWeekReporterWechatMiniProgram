@@ -1661,7 +1661,7 @@ var events = {
   "HoldoutRate": [
     ["Braxis Holdout", "布莱克西斯禁区"], //禁区
     function() {
-      if (dataPersonal.PlayerBase.maps_total.sum[12] === undefined || dataPersonal.PlayerBase.maps_total.sum[12] === 0 || dataPersonal.PlayerBase.maps_win.sum[12] === undefined)
+      if (dataPersonal.PlayerBase.maps_total.sum[12] === undefined || dataPersonal.PlayerBase.maps_total.sum[12] < 4 || dataPersonal.PlayerBase.maps_win.sum[12] === undefined )
         return false
       var AvgDamage = Math.round(dataPersonal.PlayerBase.DamageDoneToZerg.sum / dataPersonal.PlayerBase.maps_total.sum[12])
       var WinRate = (dataPersonal.PlayerBase.maps_win.sum[12] / dataPersonal.PlayerBase.maps_total.sum[12] * 100).toFixed(2)
@@ -1721,7 +1721,7 @@ var events = {
   "DragonShire": [
     ["Dragon Shire", "巨龙镇"], //巨龙镇
     function() {
-      if (dataPersonal.PlayerBase.maps_total.sum[7] === undefined || dataPersonal.PlayerBase.maps_win.sum[7] === undefined)
+      if (dataPersonal.PlayerBase.maps_total.sum[7] === undefined || dataPersonal.PlayerBase.maps_win.sum[7] === undefined || dataPersonal.PlayerBase.maps_total.sum[7] < 4 )
         return false
       var myDragon = (dataPersonal.PlayerBase.DragonNumberOfDragonCaptures.sum / dataPersonal.PlayerBase.maps_total.sum[7]).toFixed(1)
       var GlobalDragon = (dataGlobal.PlayerBase.DragonNumberOfDragonCaptures.sum / dataGlobal.PlayerBase.maps_total.sum[7]).toFixed(1)
@@ -1892,7 +1892,7 @@ var events = {
     ["My Life For Aier", "为了艾尔"],
     function() {
       if (dataPersonal.PlayerHeroes[1] === undefined || dataPersonal.PlayerHeroes[6] === undefined || dataPersonal.PlayerHeroes[43] === undefined ||
-        dataPersonal.PlayerHeroes[56] === undefined || dataPersonal.PlayerHeroes[64] === undefined || dataPersonal.PlayerHeroes[78] === undefined)
+          dataPersonal.PlayerHeroes[56] === undefined || dataPersonal.PlayerHeroes[64] === undefined || dataPersonal.PlayerHeroes[78] === undefined)
         return false
       var Zeratul = dataPersonal.PlayerHeroes[1].game_total.sum > 0
       var Tassadar = dataPersonal.PlayerHeroes[6].game_total.sum > 0
