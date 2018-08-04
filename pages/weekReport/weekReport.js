@@ -27,7 +27,7 @@ Page({
   //分享
   onShareAppMessage: function(res) {
     return {
-      title: '查看好友「' + app.globalData.playerInfo.Name + '」的背锅周报，看看他在风暴英雄都做了什么？',
+      title: ' 获取好友「' + app.globalData.playerInfo.Name + '」的背锅周报，看看他的故事',
       path: '/pages/weekReport/weekReport?playerID=' + app.globalData.playerInfo.PlayerId,
       imageUrl: 'https://www.bphots.com/images/weapp/share.jpg?' + util.timeStamp()
     }
