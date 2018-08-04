@@ -8,6 +8,18 @@ const formatTime = date => {
 
   return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute, second].map(formatNumber).join(':')
 }
+//时间戳yyMMdd
+const timeStamp = date => {
+  var timestamp = Date.parse(new Date());
+  return timestamp.toString().substring(0, 7)
+  // const year = date.getFullYear().toString().substring(2,4)
+  // const month = date.getMonth() + 1
+  // const day = date.getDate()
+  // const hour = date.getHours()
+  // const minute = date.getMinutes()
+  // const second = date.getSeconds()
+  // return [year, month, day].map(formatNumber).join('') ;//+ [hour, minute, second].map(formatNumber).join('')
+}
 
 const formatNumber = n => {
   n = n.toString()
@@ -120,5 +132,6 @@ module.exports = {
   getRegionName: getRegionName,
   getLocalPlayerInfo: getLocalPlayerInfo,
   deletePlayers: deletePlayers,
-  regionInfo: regionInfo
+  regionInfo: regionInfo,
+  timeStamp: timeStamp
 }
