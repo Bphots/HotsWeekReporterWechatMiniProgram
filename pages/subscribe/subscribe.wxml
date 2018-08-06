@@ -20,8 +20,8 @@
         <input type="text" class="edit" name="name" placeholder="Nova#1234" bindinput='bindNameInput'/>
       </view>
       <picker bindchange="bindRegionChange" value="{{regionIndex}}" range="{{region}}" class='pickerStyle regionPicker'>
-        <view class='text-wheat regionPickerView'>
-          <span style='color:#333; margin-top: 20rpx;'>选择地区：{{region[regionIndex]}}</span>
+        <view class='text-wheat regionPickerView' style='margin-top: 20rpx;'>
+          <span style='color:#333;'>选择地区：{{region[regionIndex]}}</span>
           <image class='pickerArrow' src='/image/spinner_down.png' />
         </view>
       </picker>
