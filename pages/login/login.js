@@ -3,10 +3,6 @@ const app = getApp()
 const util = require('../../utils/util.js')
 const config = require('../../config.js')
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     //服务器相关数据
     regionIndex: 0,
@@ -142,7 +138,7 @@ Page({
         if (info.data.result != null && info.data.result == 'Success') {
           var playersInfo = info.data.data
           app.globalData.playersInfo = playersInfo
-          if (info.data.data != null && info.data.data.length > 0) {
+          if (playersInfo != null && playersInfo.length > 0) {
             that.setData({
               subscription: true,
             })

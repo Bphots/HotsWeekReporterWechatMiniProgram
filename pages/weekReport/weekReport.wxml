@@ -84,9 +84,10 @@
       <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}" />
     </view>
   </view>
-  <view class='medal-draw'>
+  <view wx:if='{{isMedalDraw}}' class='medal-draw'>
     <view class='medal-draw-desc'>每周一次抽取随机勋章</view>
-    <button catchtap='medalDraw' class='btn btn-purple btn-tighten'>试试手气</button>
+    <button  catchtap='medalDraw' class='btn btn-purple btn-tighten'>试试手气</button>
   </view>
+  <button wx:if='{{!isMedalDraw}}' catchtap='backLogin' class='btn btn-purple btn-tighten'>查看我的周报</button>
   <view class='gametotal'>本周全球有 {{globalGamesCount}} 盘比赛被记录</view>
 </view>

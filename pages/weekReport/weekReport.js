@@ -3,6 +3,7 @@ import * as echarts from '../../ec-canvas/echarts';
 const app = getApp()
 const presetsJs = require('presets.js')
 const util = require('../../utils/util.js')
+const config = require('../../config.js')
 var presets
 Page({
   data: {
@@ -20,7 +21,16 @@ Page({
     WeekMostUsed: [],
     WeekGlobalMostUsed: [],
     WeekGlobalHighestWinRate: [],
-    radarData: [0, 0, 0, 0, 0]
+    radarData: [0, 0, 0, 0, 0],
+    isMedalDraw: true
+  },
+  //分享
+  onShareAppMessage: function(res) {
+    return {
+      title: ' 获取好友「' + app.globalData.playerInfo.Name + '」的背锅周报，看看他的故事',
+      path: '/pages/weekReport/weekReport?playerID=' + app.globalData.playerInfo.PlayerId,
+      imageUrl: 'https://www.bphots.com/images/weapp/share.jpg?' + util.timeStamp()
+    }
   },
   changeCounterRange: function() {
     var range = this.data.counterRange ? 0 : 1
@@ -46,6 +56,12 @@ Page({
   },
   showEventsMore: function() {
     this.showToastDeveloping()
+  },
+  backLogin: function() {
+    app.globalData.playerInfo = null
+    wx.redirectTo({
+      url: '../login/login',
+    })
   },
   medalDraw: function() {
     wx.showLoading({
@@ -139,7 +155,93 @@ Page({
     }
     return s.join(dec);
   },
-  onReady: function() {
+  onReady: function(res) {
+    console.log()
+    if (this.data.isMedalDraw) {
+      this.getReport()
+    }
+  },
+  onLoad: function(res) {
+    this.ecComponent = this.selectComponent('#mychart-dom-bar');
+    var that = this;
+    presets = app.globalData.presets
+    if (res.playerID != null) {
+      this.getPlayer(res.playerID)
+      //分享进入
+      that.setData({
+        isMedalDraw: false
+      })
+    } else {
+      //普通进入      
+      wx.showLoading({
+        title: '请稍候...',
+      })
+      that.setData({
+        nickName: app.globalData.playerInfo.Name + "#" + app.globalData.playerInfo.BattleTag,
+      })
+    }
+  },
+  //通过playerId获取角色信息
+  getPlayer: function(playerID) {
+    var that = this
+    wx.showLoading({
+      title: '请稍候...',
+    })
+    wx.request({
+      url: config.service.reportUrl,
+      data: {
+        'player_id': playerID
+      },
+      header: {
+        'sessionid': app.globalData.sessionId
+      },
+      method: 'GET',
+      success: function(info) {
+        if (info.data.result != null && info.data.result == 'Success') {
+          var playersInfo = info.data.data
+          if (playersInfo != null && playersInfo.length > 0) {
+            app.globalData.playerInfo = playersInfo[0]
+            that.setData({
+              nickName: app.globalData.playerInfo.Name + "#" + app.globalData.playerInfo.BattleTag,
+            })
+            that.getGlobalInfo()
+          }
+        } else {
+          var msg
+          if (info.data.msg == null) {
+            msg = '获取失败'
+          } else {
+            msg = info.data.msg
+          }
+          wx.showToast({
+            title: msg,
+            icon: 'none'
+          })
+        }
+      },
+      complete: function() {
+        wx.hideLoading()
+      }
+    })
+  },
+  //查询全球数据
+  getGlobalInfo: function() {
+    var that = this
+    var playerInfo = app.globalData.playerInfo
+    wx.request({
+      url: config.service.globalUrl + playerInfo.LastWeekNumber,
+      method: 'GET',
+      success: function(info) {
+        app.globalData.dataGlobal = util.parseFields(info.data)
+        that.getReport()
+      },
+      fail: function(e) {
+        console.log(e);
+      }
+    })
+  },
+  //获取周报信息
+  getReport: function() {
     // 获取组件
     var that = this;
     wx.request({
@@ -203,17 +305,6 @@ Page({
         wx.hideLoading()
         console.log(e);
       }
-    })
-  },
-  onLoad: function() {
-    this.ecComponent = this.selectComponent('#mychart-dom-bar');
-    var that = this;
-    presets = app.globalData.presets
-    wx.showLoading({
-      title: '请稍候...',
-    })
-    that.setData({
-      nickName: app.globalData.playerInfo.Name + "#" + app.globalData.playerInfo.BattleTag,
     })
   },
   // 点击按钮后初始化图表
