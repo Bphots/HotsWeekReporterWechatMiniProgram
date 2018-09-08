@@ -112,4 +112,45 @@ input-holder {
   display: flex;
   justify-content: center;
   align-items:center;
+  margin-top: 20rpx;
+}
+.subscribeContainer{
+  align-items:center;
+  background-color: #4a196b;width:100%;
+  height:100vh;
+}
+.playerContainer{
+  width:100%;  
+  display: flex; 
+  flex-direction: column;
+}
+.playerBox{
+  width:100%;  
+  display: flex; 
+  flex-direction: row;
+  align-items:center;
+}
+.PlayerName{
+  font-size: 34rpx;
+  padding:20rpx 20rpx 20rpx 20rpx;
+  flex-grow:1
+}
+.Defualt{
+  font-size: 28rpx;
+  padding:20rpx 20rpx 20rpx 20rpx;
+}
+.setDefualt{
+  font-size: 28rpx;
+  padding:20rpx 20rpx 20rpx 20rpx;
+}
+.cancleSubcribe{
+  font-size: 28rpx;
+  padding:20rpx 20rpx 20rpx 20rpx;
+}
+.add{
+  font-size: 32;
+  padding:20rpx 20rpx 20rpx 20rpx;
+}
+.chooseArea{
+  color:#333;
 }

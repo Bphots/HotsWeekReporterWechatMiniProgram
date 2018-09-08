@@ -13,7 +13,7 @@
 
     <view class='desc text-white'>这是每周一份专属你的战报，运用大数据智能分析，解读你酣战的一周。</view>
     <view class='area'>
-      <view class='area-row' style='margin-bottom: 60rpx;'>
+      <view class='area-row'>
         <view class='area-row-each'>US</view>
         <view class='area-row-each'>EU</view>
       </view>
@@ -56,9 +56,9 @@
       <view class="counter-data-each {{counterRange ? 'text-darkgrey' : ''}}">{{ counterRange ? WeekGlobalMostUsed[4][1] : WeekMostUsed[4][1]}}</view>
     </view>
     <!-- ///////////// -->
-    <button wx:if="{{counterRange}}" catchtap='changeCounterRange' class='btn btn-darkred' style="margin-bottom: 10rpx">切换为个人数据</button>
-    <button wx:else catchtap='changeCounterRange' class='btn btn-purple' style="margin-bottom: 10rpx">切换为全球数据</button>
-    <button catchtap='showCounterMore' class="btn {{counterRange ? 'btn-darkred' : 'btn-purple'}}" style="margin-top: 10rpx">查看更多</button>
+    <button wx:if="{{counterRange}}" catchtap='changeCounterRange' class='btn btn-darkred ChangeBtn'>切换为个人数据</button>
+    <button wx:else catchtap='changeCounterRange' class='btn btn-purple'>切换为全球数据</button>
+    <button catchtap='showCounterMore' class="btn {{counterRange ? 'btn-darkred' : 'btn-purple'}} CheckMore" >查看更多</button>
   </view>
   <!-- 底部 -->
   <template name="events">
@@ -80,7 +80,7 @@
   </view>
   <view class='title'>本周表现</view>
   <view class='hero-radar'>
-    <view style='width:100%; height:100%;'>
+    <view class='chartContainer'>
       <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}" />
     </view>
   </view>

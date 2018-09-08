@@ -5,7 +5,6 @@
   height: 150rpx;
   margin-top: 180rpx;
 }
-
 .edit {
   background-color: #fff;
   display: flex;
@@ -43,4 +42,22 @@
   display: flex;
   justify-content: center;
   align-items:center;
+}
+.loginContainer{
+  align-items:center;
+  background-color: #4a196b;
+  height: 100%;
+}
+.loginForm{
+  width:100%;
+}
+.subscribeFont{
+  font-size: 28rpx;
+  padding:20rpx 20rpx 20rpx 20rpx;
+}
+.desc{
+  font-size: 34rpx
+}
+.cancelSubscribe{
+  font-size: 28rpx
 }

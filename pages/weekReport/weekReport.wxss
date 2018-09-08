@@ -9,6 +9,7 @@
   width: 100%;
   display: flex;
   flex-direction: row;
+  margin-bottom: 60rpx;
 }
 
 .area-row-each {
@@ -82,8 +83,17 @@
   justify-content: center;
   margin-top: 60rpx;
 }
-
-ec-canvas {
+.ec-canvas {
   width: 40rpx;
   height: 40rpx;
+}
+.ChangeBtn{
+  margin-bottom: 10rpx;
+}
+.CheckMore{
+  margin-top: 10rpx;
+}
+.chartContainer{
+  width:100%; 
+  height:100%;
 }
