@@ -22,7 +22,7 @@
         <view class='area-row-each'>CN</view>
       </view>
     </view>
-    <button catchtap='btnStart' class='btn btn-wheat' hover-class='btn-wheat-hover'>{{scrollViewId ? '自己往下拖嘛……' : '立即开始'}}</button>
+    <button catchtap='btnStart' class='btn btn-wheat' hover-class='btn-wheat-hover'>{{scrollViewId ? '立即开始' : '立即开始'}}</button>
   </view>
   <!-- 中部 -->
   <view class='medium' id='personal'>
@@ -57,7 +57,7 @@
     </view>
     <!-- ///////////// -->
     <button wx:if="{{counterRange}}" catchtap='changeCounterRange' class='btn btn-darkred ChangeBtn'>切换为个人数据</button>
-    <button wx:else catchtap='changeCounterRange' class='btn btn-purple'>切换为全球数据</button>
+    <button wx:else catchtap='changeCounterRange' class='btn btn-purple  ChangeBtn'>切换为全球数据</button>
     <button catchtap='showCounterMore' class="btn {{counterRange ? 'btn-darkred' : 'btn-purple'}} CheckMore" >查看更多</button>
   </view>
   <!-- 底部 -->

@@ -3,14 +3,14 @@
 
   <view wx:for="{{players}}" wx:key='{{item.PlayerId}}' class='playerContainer'>
     <view class='playerBox'>
-      <view class='text-wheat' class='PlayerName'>{{item.Name}}#{{item.BattleTag}}{{item.regionName}}</view>
-      <view wx:if='{{!item.isMain}}' class='setDefualt' bindtap='setMain' data-playerid="{{item.PlayerId}}" class='text-wheat'>设置为默认</view>
-      <view wx:if='{{item.isMain}}' class='text-wheat' class='Defualt' >默认</view>
-      <view bindtap='cancelSubscribe' data-playerid="{{item.PlayerId}}" class='text-wheat' class='cancleSubcribe'>取消订阅</view>
+      <view  class='PlayerName text-wheat'>{{item.Name}}#{{item.BattleTag}}{{item.regionName}}</view>
+      <view wx:if='{{!item.isMain}}' class='setDefualt text-wheat' bindtap='setMain' data-playerid="{{item.PlayerId}}">设置为默认</view>
+      <view wx:if='{{item.isMain}}' class='Defualt text-wheat' >默认</view>
+      <view bindtap='cancelSubscribe' data-playerid="{{item.PlayerId}}" class='cancleSubcribe text-wheat'>取消订阅</view>
     </view>
     <view class='grayLineStyle' />
   </view>
-  <view bindtap='add' class='text-wheat' class='add'>添加新角色</view>
+  <view bindtap='add' class='add text-wheat'>添加新角色</view>
   <!--弹窗-->
   <view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></view>
   <view class="modal-dialog" wx:if="{{showModal}}">
