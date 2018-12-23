@@ -42,6 +42,11 @@ Page({
     this.setData({
       scrollViewId: 'personal'
     })
+    wx.pageScrollTo({
+      scrollTop: 630,
+      duration:400
+    }
+    )
   },
   showToastDeveloping: function() {
     wx.showToast({
@@ -162,6 +167,11 @@ Page({
     }
   },
   onLoad: function(res) {
+    // var counter = presetsJs.getCounter
+    // console.log(counter)
+    // var events = presetsJs.getEvents
+    // console.log(events)
+
     this.ecComponent = this.selectComponent('#mychart-dom-bar');
     var that = this;
     presets = app.globalData.presets
@@ -272,6 +282,9 @@ Page({
 
           var localEvents = [];
           var events = presetsJs.getEvents()
+          var counters = presetsJs.getCounter()
+          console.log(events)
+          console.log(counter)
           for (var i in events) {
             var item = events[i]
             var title = item[0]
