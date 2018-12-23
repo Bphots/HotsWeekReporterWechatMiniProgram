@@ -1846,7 +1846,7 @@ var events = {
       var limit = result > 4 && WinRate > 55
       return limit ? [
         "You averaged " + times + " MrecCampCaputers per game. Good occupiedCamp habits have made your winning rate is " + WinRate + "%.",
-        "你平均每场游戏占领了 " + times + " 次雇佣兵，良好的开野习惯使你的胜率达到了 " + myWinRate + "%",
+        "你平均每场游戏占领了 " + times + " 次雇佣兵，良好的开野习惯使你的胜率达到了 " + WinRate + "%",
       ] : false
     }
   ],
