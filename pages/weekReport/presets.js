@@ -2552,7 +2552,7 @@ var events = {
     function() {
       if (dataPersonal.PlayerHeroes[7] === undefined || dataPersonal.PlayerHeroes[35] === undefined)
         return false
-      var Stitches = dataPersonal.PlayerHeroes[3].game_total.sum > 5
+      var Stitches = dataPersonal.PlayerHeroes[7].game_total.sum > 5
       var Sylvanas = dataPersonal.PlayerHeroes[35].game_total.sum > 5
       var limit = Stitches && Sylvanas
       return limit ? [

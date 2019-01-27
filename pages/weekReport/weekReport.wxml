@@ -57,7 +57,7 @@
     </view>
     <!-- ///////////// -->
     <button wx:if="{{counterRange}}" catchtap='changeCounterRange' class='btn btn-darkred ChangeBtn'>切换为个人数据</button>
-    <button wx:else catchtap='changeCounterRange' class='btn btn-purple  ChangeBtn'>切换为全球数据</button>
+    <button wx:else catchtap='changeCounterRange' class='btn btn-purple ChangeBtn'>切换为全球数据</button>
     <button catchtap='showCounterMore' class="btn {{counterRange ? 'btn-darkred' : 'btn-purple'}} CheckMore" >查看更多</button>
   </view>
   <!-- 底部 -->
